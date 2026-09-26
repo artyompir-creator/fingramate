@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FinGramate</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f7f9;color:#17181a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:18px 16px 92px}
+h1{font-size:28px;margin:8px 0 4px}.muted{color:#7b8088;font-size:14px}
+.card{background:#fff;border:1px solid #e9ebef;border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 3px 14px rgba(20,25,35,.04)}
+.balance{font-size:34px;font-weight:750;margin:8px 0 14px}.progress{height:12px;background:#edf0f3;border-radius:99px;overflow:hidden}.bar{height:100%;width:42%;background:#21a366;border-radius:99px;transition:.3s}
+.row{display:flex;justify-content:space-between;gap:12px}.stat{flex:1}.stat b{display:block;font-size:18px;margin-top:4px}
+button{border:0;border-radius:14px;padding:13px 16px;font-weight:650;font-size:15px;background:#17181a;color:#fff;cursor:pointer}.primary{width:100%;margin-top:14px;background:#21a366}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{background:#fff;border:1px solid #e9ebef;border-radius:16px;padding:15px;text-align:left}
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid #e5e7eb;display:flex;justify-content:center;z-index:10}
+.navin{max-width:520px;width:100%;display:grid;grid-template-columns:repeat(4,1fr)}nav button{background:none;color:#666;padding:12px 4px;border-radius:0;font-size:12px}nav button.active{color:#21a366}
+.screen{display:none}.screen.active{display:block}
+.debt{padding:15px;border:1px solid #e9ebef;border-radius:16px;margin:10px 0;background:#fff}.debt .mini{height:8px;margin-top:9px}
+input,select{width:100%;padding:13px;border:1px solid #dfe2e7;border-radius:12px;font-size:16px;background:#fff;margin:7px 0 12px}
+label{font-size:13px;color:#6f747c}.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;z-index:20}.sheet{background:#fff;border-radius:24px 24px 0 0;padding:20px;max-width:520px;width:100%;margin:auto}.close{background:#eef0f2;color:#222;margin-right:8px}
+.small{font-size:13px}.green{color:#21a366}.red{color:#d64545}
+</style>
+</head>
+<body>
+<div class="app">
+<section id="home" class="screen active">
+  <h1>Мои финансы</h1><div class="muted">FinGramate</div>
+  <div class="card">
+    <div class="muted">Осталось долгов</div>
+    <div class="balance" id="debtTotal">217 000 ₽</div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="row" style="margin-top:14px">
+      <div class="stat"><div class="muted">Выплачено</div><b id="paid">157 000 ₽</b></div>
+      <div class="stat"><div class="muted">Всего</div><b id="allDebt">374 000 ₽</b></div>
+    </div>
+    <button class="primary" onclick="openModal('payment')">＋ Внести платёж</button>
+  </div>
+  <div class="grid">
+    <div class="tile"><div class="muted">Доходы</div><b id="income">0 ₽</b></div>
+    <div class="tile"><div class="muted">Расходы</div><b id="expense">0 ₽</b></div>
+    <div class="tile"><div class="muted">Платежи</div><b id="monthPaid">0 ₽</b></div>
+    <div class="tile"><div class="muted">Свободно</div><b id="free">0 ₽</b></div>
+  </div>
+</section>
+
+<section id="debts" class="screen"><h1>Долги</h1><div class="muted">До 10 долгов</div><div id="debtList"></div></section>
+
+<section id="stats" class="screen"><h1>Статистика</h1>
+  <div class="card"><div class="muted">Текущий темп погашения</div><div class="balance" id="rate">0 ₽/мес</div><div class="muted" id="forecast">Добавь платежи, чтобы увидеть прогноз.</div></div>
+  <div class="card"><div class="muted">За всё время</div><div class="row" style="margin-top:10px"><div><b id="statIncome">0 ₽</b><div class="muted">доходы</div></div><div><b id="statExpense">0 ₽</b><div class="muted">расходы</div></div><div><b id="statPaid">0 ₽</b><div class="muted">долги</div></div></div></div>
+</section>
+
+<section id="history" class="screen"><h1>История</h1><div id="historyList" class="card"><div class="muted">Пока операций нет.</div></div></section>
+</div>
+
+<nav><div class="navin">
+<button class="active" onclick="show('home',this)">⌂<br>Главная</button>
+<button onclick="show('debts',this)">▣<br>Долги</button>
+<button onclick="show('stats',this)">◔<br>Статистика</button>
+<button onclick="show('history',this)">☷<br>История</button>
+</div></nav>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="sheet">
+<h2 id="modalTitle">Добавить</h2>
+<div id="modalBody"></div>
+<div><button class="close" onclick="closeModal()">Отмена</button><button onclick="saveModal()">Сохранить</button></div>
+</div></div>
+
+<script>
+const KEY='fingramate_v1';
+let state=JSON.parse(localStorage.getItem(KEY)||'null')||{
+ totalDebt:374000, paid:157000,
+ debts:Array.from({length:10},(_,i)=>({name:i===0?'Кредитная карта':i===1?'Кредит':'',initial: i===0?70000:i===1?49000:0,paid:0})),
+ ops:[]
+};
+let modalType='';
+
+const fmt=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽';
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function render(){
+ const paidAll=state.paid, remain=Math.max(0,state.totalDebt-paidAll);
+ document.getElementById('debtTotal').textContent=fmt(remain);
+ document.getElementById('paid').textContent=fmt(paidAll);
+ document.getElementById('allDebt').textContent=fmt(state.totalDebt);
+ document.getElementById('bar').style.width=Math.min(100,paidAll/state.totalDebt*100)+'%';
+ let inc=state.ops.filter(x=>x.type==='income').reduce((a,x)=>a+x.amount,0);
+ let exp=state.ops.filter(x=>x.type==='expense').reduce((a,x)=>a+x.amount,0);
+ let pay=state.ops.filter(x=>x.type==='payment').reduce((a,x)=>a+x.amount,0);
+ ['income','statIncome'].forEach(id=>document.getElementById(id).textContent=fmt(inc));
+ ['expense','statExpense'].forEach(id=>document.getElementById(id).textContent=fmt(exp));
+ ['monthPaid','statPaid'].forEach(id=>document.getElementById(id).textContent=fmt(pay));
+ document.getElementById('free').textContent=fmt(inc-exp-pay);
+ const months=pay?Math.ceil(remain/(pay/Math.max(1,new Set(state.ops.filter(x=>x.type==='payment').map(x=>x.date.slice(0,7))).size))):0;
+ document.getElementById('rate').textContent=fmt(pay/Math.max(1,new Set(state.ops.filter(x=>x.type==='payment').map(x=>x.date.slice(0,7))).size))+'/мес';
+ document.getElementById('forecast').textContent=months?`При таком среднем темпе: примерно ${months} мес. до полного погашения.`:'Добавь платежи, чтобы увидеть прогноз.';
+ renderDebts(); renderHistory();
+}
+function renderDebts(){
+ const el=document.getElementById('debtList');el.innerHTML='';
+ state.debts.forEach((d,i)=>{if(!d.name)return;let rem=Math.max(0,d.initial-d.paid),p=d.initial?d.paid/d.initial*100:0;
+ el.innerHTML+=`<div class="debt"><div class="row"><b>${d.name}</b><b>${fmt(rem)}</b></div><div class="progress mini"><div class="bar" style="width:${p}%"></div></div><div class="small muted" style="margin-top:7px">Выплачено ${fmt(d.paid)} из ${fmt(d.initial)}</div></div>`});
+ el.innerHTML+=`<button class="primary" onclick="openModal('income')">＋ Добавить доход</button><button class="primary" style="background:#fff;color:#17181a;border:1px solid #ddd" onclick="openModal('expense')">− Добавить расход</button>`;
+}
+function renderHistory(){
+ const el=document.getElementById('historyList'); if(!state.ops.length){el.innerHTML='<div class="muted">Пока операций нет.</div>';return}
+ el.innerHTML=state.ops.slice().reverse().map(x=>`<div style="padding:10px 0;border-bottom:1px solid #eee"><div class="row"><b>${x.label}</b><b class="${x.type==='income'?'green':x.type==='expense'?'red':''}">${x.type==='income'?'+':'-'}${fmt(x.amount)}</b></div><div class="small muted">${x.date}</div></div>`).join('');
+}
+function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function openModal(type){modalType=type;document.getElementById('modal').style.display='flex';let b=document.getElementById('modalBody');
+ if(type==='payment')b.innerHTML=`<label>Сумма платежа</label><input id="amount" type="number" min="1" placeholder="10000"><label>Куда</label><select id="debt">${state.debts.map((d,i)=>d.name?`<option value="${i}">${d.name}</option>`:'').join('')}</select>`;
+ else if(type==='income')b.innerHTML=`<label>Сумма дохода</label><input id="amount" type="number" min="1" placeholder="80000"><label>Источник</label><input id="label" placeholder="Курьер / зарплата / другое">`;
+ else b.innerHTML=`<label>Сумма расхода</label><input id="amount" type="number" min="1" placeholder="5000"><label>Категория</label><input id="label" placeholder="Еда / аренда / транспорт">`;
+}
+function closeModal(){document.getElementById('modal').style.display='none'}
+function saveModal(){let amount=Number(document.getElementById('amount').value);if(!amount||amount<0)return alert('Введи сумму');
+ let date=new Date().toISOString().slice(0,10), label='';
+ if(modalType==='payment'){let i=Number(document.getElementById('debt').value);label=state.debts[i].name;state.debts[i].paid+=amount;state.paid+=amount}
+ else {label=document.getElementById('label').value||'Без категории'}
+ state.ops.push({type:modalType,amount,label,date});closeModal();save()}
+render();
+</script>
+</body></html>
