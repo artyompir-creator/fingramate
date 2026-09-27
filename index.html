@@ -161,51 +161,58 @@ function calcRender(){
   if(v)v.textContent=calcState.value;
 }
 function calcSafeEval(expr){
-  let x=expr.replace(/,/g,'.').replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/%/g,'/100');
-  if(!/^[0-9+\-*/().\s]+$/.test(x)) throw Error('bad');
-  if(x.length>120) throw Error('long');
-  const n=Function('"use strict";return ('+x+')')();
-  if(!Number.isFinite(n)) throw Error('bad');
-  return n;
+  const src=String(expr).replace(/,/g,'.').replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+  if(src.length>120 || !/^[0-9+\-*/().%\s]+$/.test(src)) throw Error('bad');
+  let i=0;
+  const ws=()=>{while(/\s/.test(src[i]||''))i++};
+  const eat=c=>{ws();if(src[i]===c){i++;return true}return false};
+  const number=()=>{ws();let st=i;if(src[i]==='+'||src[i]==='-')i++;while(/[0-9.]/.test(src[i]||''))i++;if(st===i)throw Error('num');let n=Number(src.slice(st,i));if(!Number.isFinite(n))throw Error('num');if(eat('%'))n/=100;return n};
+  const factor=()=>{ws();if(eat('(')){let n=add();if(!eat(')'))throw Error('paren');if(eat('%'))n/=100;return n}return number()};
+  const mul=()=>{let n=factor();for(;;){ws();let op=src[i];if(op!=='*'&&op!=='/')break;i++;let r=factor();n=op==='*'?n*r:n/r;if(!Number.isFinite(n))throw Error('math')}return n};
+  const add=()=>{let n=mul();for(;;){ws();let op=src[i];if(op!=='+'&&op!=='-')break;i++;let r=mul();n=op==='+'?n+r:n-r}return n};
+  const n=add();ws();if(i!==src.length||!Number.isFinite(n))throw Error('bad');return n;
 }
 function calcPress(k){
   if(k==='C'){calcState={expr:'',value:'0',justResult:false};calcRender();return}
-  if(k==='⌫'){if(calcState.justResult){calcState={expr:'',value:'0',justResult:false}}else{calcState.expr=calcState.expr.slice(0,-1)||'';calcState.value=calcState.expr||'0'}calcRender();return}
-  if(k==='='){
-    if(!calcState.expr)return;
-    try{const n=calcSafeEval(calcState.expr);calcState.value=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:8}).format(n).replace(/\u00a0/g,' ');calcState.expr=String(n);calcState.justResult=true}catch{toast('Проверь выражение');}
-    calcRender();return
-  }
-  if(k==='±'){
-    if(calcState.expr){calcState.expr=calcState.expr.startsWith('-')?calcState.expr.slice(1):'-('+calcState.expr);calcState.value=calcState.expr}
-    calcRender();return
-  }
+  if(k==='⌫'){if(calcState.justResult){calcState={expr:'',value:'0',justResult:false}}else{calcState.expr=calcState.expr.slice(0,-1);calcState.value=calcState.expr||'0'}calcRender();return}
+  if(k==='='){if(!calcState.expr)return;try{const n=calcSafeEval(calcState.expr);calcState.value=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:8}).format(n).replace(/\u00a0/g,' ');calcState.expr=String(n);calcState.justResult=true}catch(e){toast('Проверь выражение')}calcRender();return}
+  if(k==='±'){if(calcState.expr){calcState.expr=calcState.expr.startsWith('-')?calcState.expr.slice(1):'-('+calcState.expr+')';calcState.value=calcState.expr}calcRender();return}
   if(calcState.justResult&&!/[+\-×÷%]/.test(k)){calcState={expr:'',value:'0',justResult:false}}
-  if(k==='.') {
-    const last=calcState.expr.split(/[+\-×÷%()]/).pop();
-    if(last.includes('.'))return;
-  }
+  if(k==='.') {const last=calcState.expr.split(/[+\-×÷%()]/).pop();if(last.includes('.'))return}
   calcState.expr+=k;calcState.value=calcState.expr||'0';calcState.justResult=false;calcRender();
-}
-function calcQuick(type){
-  const v=parseFloat(String(calcState.value).replace(/\s/g,'').replace(',','.'));
-  if(!Number.isFinite(v))return;
-  if(type==='10%') calcState={expr:String(v*0.1),value:String(v*0.1),justResult:true};
-  if(type==='15%') calcState={expr:String(v*0.15),value:String(v*0.15),justResult:true};
-  if(type==='18%') calcState={expr:String(v*0.18),value:String(v*0.18),justResult:true};
-  calcRender();
 }
 function calculatorSheet(){
 return `<div class="sectionTitle" style="margin-top:0"><svg class="sectionIcon" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="3" fill="currentColor" opacity=".12"/><rect x="4" y="3" width="16" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><rect x="7" y="6" width="10" height="4" rx="1.2" fill="currentColor" opacity=".25"/><path d="M8 14h2m4 0h2M8 17h2m4 0h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Калькулятор</div>
 <div class="calcDisplay"><div class="calcExpr" id="calcExpr"></div><div class="calcValue" id="calcValue">0</div></div>
-<div class="calcQuick"><button type="button" onclick="calcQuick('10%')">10% от числа</button><button type="button" onclick="calcQuick('15%')">15% от числа</button><button type="button" onclick="calcQuick('18%')">18% от числа</button></div>
+<div class="calcQuick"><button type="button" data-cquick="10%">10% от числа</button><button type="button" data-cquick="15%">15% от числа</button><button type="button" data-cquick="18%">18% от числа</button></div>
 <div class="calcGrid">
-<button class="calcKey" type="button" onclick="calcPress('C')">C</button><button class="calcKey" type="button" onclick="calcPress('⌫')">⌫</button><button class="calcKey op" type="button" onclick="calcPress('%')">%</button><button class="calcKey op" type="button" onclick="calcPress('÷')">÷</button>
-<button class="calcKey" type="button" onclick="calcPress('7')">7</button><button class="calcKey" type="button" onclick="calcPress('8')">8</button><button class="calcKey" type="button" onclick="calcPress('9')">9</button><button class="calcKey op" type="button" onclick="calcPress('×')">×</button>
-<button class="calcKey" type="button" onclick="calcPress('4')">4</button><button class="calcKey" type="button" onclick="calcPress('5')">5</button><button class="calcKey" type="button" onclick="calcPress('6')">6</button><button class="calcKey op" type="button" onclick="calcPress('−')">−</button>
-<button class="calcKey" type="button" onclick="calcPress('1')">1</button><button class="calcKey" type="button" onclick="calcPress('2')">2</button><button class="calcKey" type="button" onclick="calcPress('3')">3</button><button class="calcKey op" type="button" onclick="calcPress('+')">+</button>
-<button class="calcKey" type="button" onclick="calcPress('0')">0</button><button class="calcKey" type="button" onclick="calcPress('.')">.</button><button class="calcKey" type="button" onclick="calcPress('±')">±</button><button class="calcKey equal" type="button" onclick="calcPress('=')">=</button>
-</div><div class="calcHint">Поддерживает + − × ÷ %, скобки можно вводить с клавиатуры.</div>`;
+<button class="calcKey" type="button" data-calc="C">C</button><button class="calcKey" type="button" data-calc="⌫">⌫</button><button class="calcKey op" type="button" data-calc="%">%</button><button class="calcKey op" type="button" data-calc="÷">÷</button>
+<button class="calcKey" type="button" data-calc="7">7</button><button class="calcKey" type="button" data-calc="8">8</button><button class="calcKey" type="button" data-calc="9">9</button><button class="calcKey op" type="button" data-calc="×">×</button>
+<button class="calcKey" type="button" data-calc="4">4</button><button class="calcKey" type="button" data-calc="5">5</button><button class="calcKey" type="button" data-calc="6">6</button><button class="calcKey op" type="button" data-calc="−">−</button>
+<button class="calcKey" type="button" data-calc="1">1</button><button class="calcKey" type="button" data-calc="2">2</button><button class="calcKey" type="button" data-calc="3">3</button><button class="calcKey op" type="button" data-calc="+">+</button>
+<button class="calcKey" type="button" data-calc="0">0</button><button class="calcKey" type="button" data-calc=".">.</button><button class="calcKey" type="button" data-calc="±">±</button><button class="calcKey equal" type="button" data-calc="=">=</button>
+</div><div class="calcHint">+ − × ÷ % · можно использовать клавиатуру</div>`;
+}
+function calcQuick(kind){
+  const raw=calcState.value.replace(/\s/g,'').replace(/,/g,'.');
+  const n=Number(raw);
+  if(!Number.isFinite(n)){toast('Сначала введи число');return}
+  const pct=Number(String(kind).replace('%',''))/100;
+  const result=n*pct;
+  calcState={expr:`${n} × ${kind}`,value:new Intl.NumberFormat('ru-RU',{maximumFractionDigits:8}).format(result).replace(/\u00a0/g,' '),justResult:true};
+  calcRender();
+}
+function bindCalculator(){
+  calcRender();
+  const root=document.getElementById('sheetContent');
+  if(!root || root.dataset.calcBound==='1') return;
+  root.dataset.calcBound='1';
+  root.addEventListener('click',function(e){
+    const key=e.target.closest('[data-calc]');
+    if(key && root.contains(key)){ e.preventDefault(); e.stopPropagation(); calcPress(key.getAttribute('data-calc')); return; }
+    const quick=e.target.closest('[data-cquick]');
+    if(quick && root.contains(quick)){ e.preventDefault(); e.stopPropagation(); calcQuick(quick.getAttribute('data-cquick')); }
+  });
 }
 function openSheet(type,id){let c='';
 if(type==='income')c=`<h2>＋ Добавить доход</h2><label>Сумма</label><input id="amount" type="number" placeholder="60000"><label>Источник</label><input id="source" placeholder="Работа, подработка..."><label>Дата</label><input id="entryDate" type="date" value="${defaultEntryDate()}"><button class="btn primary" style="width:100%" onclick="addIncome()">Сохранить доход</button>`;
@@ -216,7 +223,7 @@ if(type==='goal')c=`<h2>🎯 Новая цель</h2><label>Название</la
 if(type==='goalpay')c=`<h2>Пополнить цель</h2><div class="eyebrow">${esc(data.goals[id].name)}</div><label>Сумма</label><input id="amount" type="number" placeholder="5000"><label>Дата</label><input id="entryDate" type="date" value="${defaultEntryDate()}"><button class="btn primary" style="width:100%" onclick="goalPay(${id})">Пополнить</button>`;
 if(type==='calculator')c=calculatorSheet();
 if(type==='settings')c=`<h2>Настройки</h2><div class="eyebrow">Тема</div><div class="choice">${[['dark','Тёмная'],['black','Чёрная'],['light','Светлая'],['blue','Синяя'],['green','Зелёная'],['pink','Розовая'],['raspberry','Малиновая']].map(x=>`<button class="${data.theme===x[0]?'sel':''}" onclick="setTheme('${x[0]}')">${x[1]}</button>`).join('')}</div><p class="muted" style="margin-top:20px">Данные пока хранятся на этом устройстве. Резервную копию можно выгрузить через раздел «Ещё».</p>`;
-document.getElementById('sheetContent').innerHTML=c;document.getElementById('sheet').classList.add('open')}
+document.getElementById('sheetContent').innerHTML=c;document.getElementById('sheet').classList.add('open');if(type==='calculator')bindCalculator()}
 function closeSheet(){document.getElementById('sheet').classList.remove('open')}
 function addIncome(){let a=+amount.value;if(!a||a<0)return;let s=source.value||'Доход',d=entryDate.value||dateKey(now()),iso=new Date(d+'T12:00:00').toISOString();data.income.push({amount:a,source:s,month:d.slice(0,7),date:iso});data.history.unshift({type:'income',amount:a,text:s,date:iso});closeSheet();save();toast('Доход добавлен')}
 function addExpense(){let a=+amount.value;if(!a||a<0)return;let c=category.value,d=entryDate.value||dateKey(now()),iso=new Date(d+'T12:00:00').toISOString();data.expenses.push({amount:a,category:c,month:d.slice(0,7),date:iso});data.history.unshift({type:'expense',amount:a,text:c,date:iso});closeSheet();save();toast('Расход добавлен')}
