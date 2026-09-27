@@ -1,150 +1,70 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0f19">
-<title>FinGramate</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f19"><title>FinGramate</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{
- --bg:#0b0f19;--bg2:#111827;--card:rgba(255,255,255,.075);--line:rgba(255,255,255,.11);
- --text:#f7f8fb;--muted:#98a2b3;--accent:#7c5cff;--accent2:#a78bfa;
- --good:#31d08a;--bad:#ff647c;--shadow:0 20px 60px rgba(0,0,0,.28);
-}
-[data-theme="light"]{--bg:#eef2f7;--bg2:#f8fafc;--card:rgba(255,255,255,.62);--line:rgba(15,23,42,.10);--text:#101828;--muted:#667085;--shadow:0 20px 50px rgba(31,41,55,.12)}
-[data-theme="blue"]{--accent:#3b82f6;--accent2:#60a5fa}
-[data-theme="green"]{--accent:#10b981;--accent2:#34d399}
-[data-theme="pink"]{--accent:#ec4899;--accent2:#f472b6}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:
- radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--accent) 25%,transparent),transparent 32%),
- radial-gradient(circle at 100% 20%,rgba(56,189,248,.12),transparent 30%),var(--bg);
- color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,input{font:inherit}
-button{cursor:pointer}
-.app{max-width:560px;margin:auto;padding:18px 16px 105px}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.brand{font-size:24px;font-weight:800}.brand span{color:var(--accent2)}
-.icon{width:42px;height:42px;border:1px solid var(--line);border-radius:15px;background:var(--card);backdrop-filter:blur(22px);color:var(--text)}
-.card{border:1px solid var(--line);background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:25px;padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
-.eyebrow{font-size:13px;color:var(--muted);margin-bottom:7px}
-.total{font-size:36px;font-weight:850;letter-spacing:-1px}
-.progress{height:12px;border-radius:99px;background:rgba(128,128,128,.18);overflow:hidden;margin:18px 0 10px}
-.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:.45s}
-.row{display:flex;justify-content:space-between;gap:10px}
-.stat{flex:1}.stat b{display:block;font-size:17px}.stat small{color:var(--muted)}
-.tabs{display:flex;gap:8px;margin:8px 0 14px}
-.tab{flex:1;border:1px solid var(--line);background:var(--card);color:var(--muted);padding:11px;border-radius:15px}
-.tab.active{background:var(--accent);color:white;border-color:transparent}
-.screen{display:none}.screen.active{display:block}
-.debt{padding:16px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.035);margin-bottom:10px}
-.debt-top{display:flex;justify-content:space-between;gap:10px}.debt-name{font-weight:750}.debt-amount{font-weight:800}
-.mini{height:7px;margin:10px 0;background:rgba(128,128,128,.17);border-radius:99px;overflow:hidden}.mini i{display:block;height:100%;background:var(--accent);border-radius:99px}
-.actions{display:flex;gap:8px}.actions button{flex:1;padding:10px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text)}
-.primary{background:var(--accent)!important;color:#fff!important;border-color:transparent!important}
-input,select{width:100%;padding:13px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--text);outline:none;margin:6px 0 10px}
-label{font-size:13px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.history{font-size:14px}.history div{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
-.empty{color:var(--muted);text-align:center;padding:22px}
-.nav{position:fixed;z-index:5;left:50%;bottom:12px;transform:translateX(-50%);width:min(540px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;border:1px solid var(--line);border-radius:22px;background:rgba(15,18,28,.72);backdrop-filter:blur(24px)}
-[data-theme="light"] .nav{background:rgba(255,255,255,.72)}
-.nav button{border:0;background:none;color:var(--muted);padding:8px 4px;border-radius:15px}.nav button.active{color:var(--text);background:rgba(255,255,255,.09)}
-.sheet{position:fixed;inset:0;background:rgba(0,0,0,.48);display:none;align-items:flex-end;z-index:10}.sheet.open{display:flex}
-.modal{width:min(560px,100%);margin:auto auto 0;background:var(--bg2);border:1px solid var(--line);border-radius:28px 28px 0 0;padding:22px;max-height:88vh;overflow:auto}
-.close{float:right;border:0;background:none;color:var(--muted);font-size:24px}
-.theme-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.theme{height:42px;border-radius:14px;border:2px solid transparent}.theme.sel{border-color:var(--text)}
-.t-dark{background:#0b0f19}.t-light{background:#eef2f7}.t-blue{background:#2563eb}.t-green{background:#059669}.t-pink{background:#db2777}
-.toast{position:fixed;z-index:20;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);opacity:0;background:#171b26;color:white;padding:12px 16px;border-radius:14px;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%)}
-</style>
-</head>
-<body>
-<div class="app">
-<header><div class="brand">Fin<span>Gramate</span></div><button class="icon" onclick="openSheet('settings')">⚙️</button></header>
+:root{--bg:#080b13;--bg2:#111624;--card:rgba(255,255,255,.075);--line:rgba(255,255,255,.11);--text:#f8fafc;--muted:#9aa4b6;--a:#7c5cff;--a2:#b197ff;--good:#32d583;--bad:#ff647c;--warn:#f7c948;--shadow:0 20px 70px rgba(0,0,0,.28)}
+[data-theme=light]{--bg:#eef2f7;--bg2:#fff;--card:rgba(255,255,255,.7);--line:rgba(15,23,42,.1);--text:#101828;--muted:#667085;--shadow:0 18px 50px rgba(15,23,42,.12)}
+[data-theme=blue]{--a:#3b82f6;--a2:#60a5fa}.theme-green{--a:#10b981;--a2:#34d399}.theme-pink{--a:#ec4899;--a2:#f472b6}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 0%,color-mix(in srgb,var(--a) 24%,transparent),transparent 34%),radial-gradient(circle at 100% 25%,rgba(56,189,248,.1),transparent 32%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer;color:inherit}.app{max-width:600px;margin:auto;padding:18px 16px calc(112px + env(safe-area-inset-bottom))}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.brand{font-size:25px;font-weight:850}.brand span{color:var(--a2)}.icon{width:44px;height:44px;border:1px solid var(--line);border-radius:15px;background:var(--card);backdrop-filter:blur(20px)}
+.screen{display:none}.screen.active{display:block}.card{border:1px solid var(--line);background:var(--card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-radius:25px;padding:19px;margin-bottom:13px;box-shadow:var(--shadow)}.eyebrow{font-size:13px;color:var(--muted);margin-bottom:7px}.big{font-size:35px;font-weight:850;letter-spacing:-1.3px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.miniCard{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:19px;padding:15px}.miniCard b{font-size:19px}.miniCard small{display:block;color:var(--muted);margin-top:4px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.progress{height:11px;background:rgba(128,128,128,.18);border-radius:99px;overflow:hidden;margin:16px 0 9px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:.4s}.btn{border:1px solid var(--line);background:rgba(255,255,255,.055);padding:12px 14px;border-radius:15px}.primary{background:var(--a)!important;color:#fff!important;border-color:transparent!important}.danger{color:var(--bad)!important}.green{color:var(--good)!important}.muted{color:var(--muted)}
+.sectionTitle{font-size:18px;font-weight:800;margin:20px 2px 10px}.debt,.tx,.goal{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:20px;padding:16px;margin-bottom:10px}.debt h3,.goal h3{margin:0 0 3px;font-size:17px}.amount{font-weight:850;font-size:21px}.bar{height:7px;background:rgba(128,128,128,.17);border-radius:99px;overflow:hidden;margin:11px 0 8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px}.actions{display:flex;gap:8px;margin-top:10px}.actions .btn{flex:1;padding:10px}.tag{display:inline-flex;padding:5px 8px;border-radius:9px;background:rgba(124,92,255,.13);color:var(--a2);font-size:11px}.tx{display:flex;justify-content:space-between;gap:12px}.tx .sum{font-weight:800;white-space:nowrap}.positive{color:var(--good)}.negative{color:var(--bad)}
+.nav{position:fixed;z-index:5;left:50%;bottom:10px;transform:translateX(-50%);width:min(570px,calc(100% - 20px));display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;border:1px solid var(--line);border-radius:23px;background:rgba(15,18,28,.78);backdrop-filter:blur(24px)}[data-theme=light] .nav{background:rgba(255,255,255,.78)}.nav button{border:0;background:none;color:var(--muted);padding:7px 2px;border-radius:15px;font-size:20px}.nav button small{font-size:10px}.nav button.active{color:var(--text);background:rgba(255,255,255,.09)}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:20}.sheet.open{display:flex}.modal{width:min(600px,100%);margin:auto auto 0;background:var(--bg2);border:1px solid var(--line);border-radius:28px 28px 0 0;padding:22px;max-height:90vh;overflow:auto}.close{float:right;border:0;background:none;font-size:25px;color:var(--muted)}label{font-size:12px;color:var(--muted)}input,select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.07);color:var(--text);outline:none;margin:5px 0 11px}h2{margin:0 0 18px}.choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice button{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.05)}.choice button.sel{background:var(--a);color:#fff;border-color:transparent}.empty{text-align:center;color:var(--muted);padding:22px 8px}.toast{position:fixed;z-index:30;left:50%;bottom:100px;transform:translate(-50%,20px);opacity:0;background:#171b26;color:#fff;padding:12px 16px;border-radius:14px;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+</style></head>
+<body><div class="app">
+<header class="top"><div class="brand">Fin<span>Gramate</span></div><button class="icon" onclick="openSheet('settings')">⚙️</button></header>
 
 <section id="home" class="screen active">
-<div class="card">
-<div class="eyebrow">Общий остаток долгов</div>
-<div class="total" id="total">0 ₽</div>
-<div class="progress"><i id="totalBar"></i></div>
-<div class="row">
-<div class="stat"><b id="paid">0 ₽</b><small>выплачено</small></div>
-<div class="stat"><b id="percent">0%</b><small>прогресс</small></div>
-</div>
-</div>
-<div class="card">
-<div class="eyebrow">Доходы за месяц</div>
-<div class="total" id="income">0 ₽</div>
-<div class="row" style="margin-top:15px"><button class="tab active" onclick="openSheet('income')">+ Добавить доход</button></div>
-</div>
-<div class="card"><div class="eyebrow">Ближайший ориентир</div><div id="forecast">Добавь доходы и долги — здесь появится расчёт.</div></div>
+<div class="card"><div class="eyebrow">Финансовая свобода</div><div class="big" id="netDebt">0 ₽</div><div class="progress"><i id="debtBar"></i></div><div class="row"><span class="muted" id="debtPct">0% долгов погашено</span><span class="muted" id="debtStart">из 0 ₽</span></div></div>
+<div class="grid2"><div class="miniCard"><div class="eyebrow">Доходы</div><b id="monthIncome">0 ₽</b><small>за месяц</small></div><div class="miniCard"><div class="eyebrow">Расходы</div><b id="monthExpense">0 ₽</b><small>за месяц</small></div></div>
+<div class="grid2" style="margin-top:10px"><div class="miniCard"><div class="eyebrow">Свободно</div><b id="freeMoney">0 ₽</b><small>до платежей</small></div><div class="miniCard"><div class="eyebrow">Платежи</div><b id="monthPayments">0 ₽</b><small>за месяц</small></div></div>
+<div class="card" style="margin-top:13px"><div class="eyebrow">Ближайший ориентир</div><div id="forecast" style="font-size:18px;font-weight:750">Добавь долги и доходы — построим план.</div><p class="muted" id="forecastSub" style="margin-bottom:0">Приложение будет считать примерный срок погашения.</p></div>
+<div class="sectionTitle">Быстрые действия</div><div class="grid2"><button class="btn primary" onclick="openSheet('income')">＋ Доход</button><button class="btn" onclick="openSheet('expense')">− Расход</button><button class="btn" onclick="openSheet('debt')">＋ Новый долг</button><button class="btn" onclick="openSheet('goal')">🎯 Цель</button></div>
 </section>
 
-<section id="debts" class="screen">
-<div class="card"><div class="row"><div><div class="eyebrow">Мои долги</div><b>До 10 обязательств</b></div><button class="icon" onclick="openSheet('debt')">＋</button></div></div>
-<div id="debtList"></div>
-</section>
-
-<section id="history" class="screen">
-<div class="card"><div class="eyebrow">История платежей и доходов</div><div id="historyList" class="history"></div></div>
-</section>
-
-<section id="more" class="screen">
-<div class="card">
-<div class="eyebrow">Данные</div>
-<button class="tab" style="width:100%;margin-bottom:8px" onclick="exportData()">Экспортировать данные</button>
-<button class="tab" style="width:100%;color:var(--bad)" onclick="resetAll()">Сбросить всё</button>
+<section id="debts" class="screen"><div class="card"><div class="row"><div><div class="eyebrow">Обязательства</div><b id="debtCount">0 долгов</b></div><button class="icon" onclick="openSheet('debt')">＋</button></div></div><div id="debtList"></div></section>
+<section id="money" class="screen"><div class="grid2"><button class="btn primary" onclick="openSheet('income')">＋ Доход</button><button class="btn" onclick="openSheet('expense')">− Расход</button></div><div class="sectionTitle">Последние операции</div><div id="moneyList"></div></section>
+<section id="analytics" class="screen"><div class="card"><div class="eyebrow">Сценарий погашения</div><div class="big" id="scenarioMonths">—</div><p class="muted">примерный срок при текущем темпе</p><label>Сколько готов направлять на долги в месяц?</label><input id="scenario" type="number" value="30000" oninput="renderScenario()"><div id="scenarioText" class="muted"></div></div><div class="sectionTitle">Финансовые показатели</div><div id="stats" class="grid2"></div><div class="sectionTitle">Цели</div><div id="goalList"></div></section>
+<section id="more" class="screen"><div class="card"><div class="sectionTitle" style="margin-top:0">Данные</div><button class="btn" style="width:100%;margin-bottom:8px" onclick="exportData()">Экспортировать резервную копию</button><button class="btn danger" style="width:100%" onclick="resetAll()">Сбросить все данные</button></div><div class="card"><div class="eyebrow">О FinGramate</div><b>Личный финансовый центр</b><p class="muted">Долги, доходы, расходы, цели, прогнозы и история в одном месте.</p></div></section>
 </div>
-<div class="card"><div class="eyebrow">О приложении</div><b>FinGramate</b><p style="color:var(--muted)">Личный трекер долгов, доходов и финансового прогресса.</p></div>
-</section>
-</div>
-
-<nav class="nav">
-<button class="active" onclick="show('home',this)">⌂<br><small>Главная</small></button>
-<button onclick="show('debts',this)">₽<br><small>Долги</small></button>
-<button onclick="show('history',this)">↗<br><small>История</small></button>
-<button onclick="show('more',this)">•••<br><small>Ещё</small></button>
-</nav>
-
-<div class="sheet" id="sheet"><div class="modal"><button class="close" onclick="closeSheet()">×</button><div id="sheetContent"></div></div></div>
-<div class="toast" id="toast"></div>
-
+<nav class="nav"><button class="active" onclick="show('home',this)">⌂<br><small>Главная</small></button><button onclick="show('debts',this)">₽<br><small>Долги</small></button><button onclick="show('money',this)">↕<br><small>Деньги</small></button><button onclick="show('analytics',this)">◔<br><small>Аналитика</small></button><button onclick="show('more',this)">•••<br><small>Ещё</small></button></nav>
+<div class="sheet" id="sheet"><div class="modal"><button class="close" onclick="closeSheet()">×</button><div id="sheetContent"></div></div></div><div id="toast" class="toast"></div>
 <script>
-const KEY='fingramate_v3';
-let data=JSON.parse(localStorage.getItem(KEY)||'null')||{debts:[],income:[],history:[],theme:'dark'};
-const fmt=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽';
-const save=()=>{localStorage.setItem(KEY,JSON.stringify(data));render()};
-function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
-function show(id,btn){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');render()}
-function openSheet(type,id){
-let c='';
-if(type==='income') c=`<h2>Добавить доход</h2><label>Сумма</label><input id="amount" type="number" placeholder="Например, 60000"><label>Источник</label><input id="source" placeholder="Курьер, зарплата..."><button class="tab primary" style="width:100%" onclick="addIncome()">Сохранить</button>`;
-if(type==='debt') c=`<h2>Новый долг</h2><label>Название</label><input id="dname" placeholder="Кредитная карта"><label>Сумма долга</label><input id="damount" type="number" placeholder="70000"><button class="tab primary" style="width:100%" onclick="addDebt()">Добавить долг</button>`;
-if(type==='pay') c=`<h2>Платёж</h2><div class="eyebrow">${data.debts[id].name}</div><div style="font-size:28px;font-weight:800">${fmt(data.debts[id].left)}</div><label>Сколько заплатил?</label><input id="amount" type="number" placeholder="5000"><button class="tab primary" style="width:100%" onclick="pay(${id})">Засчитать платёж</button>`;
-if(type==='settings') c=`<h2>Тема приложения</h2><p class="eyebrow">Выбери оформление</p><div class="theme-row">${[['dark','t-dark'],['light','t-light'],['blue','t-blue'],['green','t-green'],['pink','t-pink']].map(x=>`<button class="theme ${x[0]===data.theme?'sel':''} ${x[1]}" onclick="setTheme('${x[0]}')"></button>`).join('')}</div><h3 style="margin-top:25px">Как использовать</h3><p style="color:var(--muted)">Добавь до 10 долгов, записывай доходы и каждый платёж. Прогресс сохраняется прямо в браузере этого устройства.</p>`;
-document.getElementById('sheetContent').innerHTML=c;document.getElementById('sheet').classList.add('open');
-}
+const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand()}
+const KEY='fingramate_v4';let data=JSON.parse(localStorage.getItem(KEY)||'null')||{debts:[],income:[],expenses:[],history:[],goals:[],theme:'dark'};
+const fmt=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽',now=()=>new Date(),monthKey=()=>{let d=now();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function show(id,b){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()}
+function openSheet(type,id){let c='';
+if(type==='income')c=`<h2>＋ Добавить доход</h2><label>Сумма</label><input id="amount" type="number" placeholder="60000"><label>Источник</label><input id="source" placeholder="Работа, подработка..."><button class="btn primary" style="width:100%" onclick="addIncome()">Сохранить доход</button>`;
+if(type==='expense')c=`<h2>− Добавить расход</h2><label>Сумма</label><input id="amount" type="number" placeholder="2500"><label>Категория</label><select id="category"><option>Еда</option><option>Жильё</option><option>Транспорт</option><option>Связь</option><option>Развлечения</option><option>Другое</option></select><button class="btn primary" style="width:100%" onclick="addExpense()">Сохранить расход</button>`;
+if(type==='debt')c=`<h2>＋ Новый долг</h2><label>Название</label><input id="dname" placeholder="Кредитная карта"><label>Кому / организация</label><input id="dwho" placeholder="Банк, друг..."><label>Общая сумма</label><input id="damount" type="number" placeholder="70000"><label>Минимальный платёж</label><input id="dmin" type="number" placeholder="3500"><label>Дата следующего платежа</label><input id="ddate" type="date"><button class="btn primary" style="width:100%" onclick="addDebt()">Добавить долг</button>`;
+if(type==='pay')c=`<h2>＋ Платёж</h2><div class="eyebrow">${esc(data.debts[id].name)}</div><div class="big">${fmt(data.debts[id].left)}</div><label>Сумма платежа</label><input id="amount" type="number" placeholder="5000"><button class="btn primary" style="width:100%" onclick="pay(${id})">Засчитать платёж</button>`;
+if(type==='goal')c=`<h2>🎯 Новая цель</h2><label>Название</label><input id="gname" placeholder="Подушка, мотоцикл..."><label>Сумма цели</label><input id="gtotal" type="number" placeholder="100000"><button class="btn primary" style="width:100%" onclick="addGoal()">Создать цель</button>`;
+if(type==='goalpay')c=`<h2>Пополнить цель</h2><div class="eyebrow">${esc(data.goals[id].name)}</div><label>Сумма</label><input id="amount" type="number" placeholder="5000"><button class="btn primary" style="width:100%" onclick="goalPay(${id})">Пополнить</button>`;
+if(type==='settings')c=`<h2>Настройки</h2><div class="eyebrow">Тема</div><div class="choice">${[['dark','Тёмная'],['light','Светлая'],['blue','Синяя'],['green','Зелёная'],['pink','Розовая']].map(x=>`<button class="${data.theme===x[0]?'sel':''}" onclick="setTheme('${x[0]}')">${x[1]}</button>`).join('')}</div><p class="muted" style="margin-top:20px">Данные пока хранятся на этом устройстве. Резервную копию можно выгрузить через раздел «Ещё».</p>`;
+document.getElementById('sheetContent').innerHTML=c;document.getElementById('sheet').classList.add('open')}
 function closeSheet(){document.getElementById('sheet').classList.remove('open')}
-function addIncome(){let a=+document.getElementById('amount').value;if(!a)return;data.income.push({amount:a,source:document.getElementById('source').value||'Доход',date:new Date().toLocaleDateString('ru-RU')});data.history.unshift({type:'income',amount:a,text:'Доход: '+(document.getElementById('source').value||'Доход'),date:new Date().toLocaleString('ru-RU')});closeSheet();save();toast('Доход добавлен')}
-function addDebt(){let n=document.getElementById('dname').value.trim(),a=+document.getElementById('damount').value;if(!n||!a||data.debts.length>=10)return toast('Заполни название и сумму');data.debts.push({name:n,total:a,left:a,paid:0});closeSheet();save();toast('Долг добавлен')}
-function pay(i){let a=+document.getElementById('amount').value;if(!a||a<=0)return;if(a>data.debts[i].left)a=data.debts[i].left;data.debts[i].left-=a;data.debts[i].paid+=a;data.history.unshift({type:'pay',amount:a,text:'Платёж: '+data.debts[i].name,date:new Date().toLocaleString('ru-RU')});closeSheet();save();toast('Платёж засчитан')}
+function addIncome(){let a=+amount.value;if(!a||a<0)return;let s=source.value||'Доход';data.income.push({amount:a,source:s,month:monthKey(),date:now().toISOString()});data.history.unshift({type:'income',amount:a,text:s,date:now().toISOString()});closeSheet();save();toast('Доход добавлен')}
+function addExpense(){let a=+amount.value;if(!a||a<0)return;let c=category.value;data.expenses.push({amount:a,category:c,month:monthKey(),date:now().toISOString()});data.history.unshift({type:'expense',amount:a,text:c,date:now().toISOString()});closeSheet();save();toast('Расход добавлен')}
+function addDebt(){let n=dname.value.trim(),a=+damount.value;if(!n||!a)return toast('Укажи название и сумму');if(data.debts.length>=10)return toast('Максимум 10 долгов');data.debts.push({name:n,who:dwho.value||'',total:a,left:a,paid:0,min:+dmin.value||0,due:ddate.value||''});closeSheet();save();toast('Долг добавлен')}
+function pay(i){let a=+document.getElementById('amount').value;if(!a||a<=0)return;a=Math.min(a,data.debts[i].left);data.debts[i].left-=a;data.debts[i].paid+=a;data.history.unshift({type:'pay',amount:a,text:'Платёж: '+data.debts[i].name,date:now().toISOString()});closeSheet();save();toast('Платёж засчитан')}
+function addGoal(){let n=gname.value.trim(),a=+gtotal.value;if(!n||!a)return;data.goals.push({name:n,total:a,saved:0});closeSheet();save();toast('Цель создана')}
+function goalPay(i){let a=+amount.value;if(!a||a<=0)return;data.goals[i].saved=Math.min(data.goals[i].total,data.goals[i].saved+a);closeSheet();save();toast('Цель пополнена')}
+function deleteDebt(i){if(confirm('Удалить долг?')){data.debts.splice(i,1);save()}}function deleteGoal(i){if(confirm('Удалить цель?')){data.goals.splice(i,1);save()}}
 function setTheme(t){data.theme=t;document.documentElement.dataset.theme=t;save();openSheet('settings')}
-function render(){
-document.documentElement.dataset.theme=data.theme;
-let total=data.debts.reduce((s,d)=>s+d.left,0),paid=data.debts.reduce((s,d)=>s+d.paid,0),start=total+paid;
-document.getElementById('total').textContent=fmt(total);document.getElementById('paid').textContent=fmt(paid);
-let p=start?Math.round(paid/start*100):0;document.getElementById('percent').textContent=p+'%';document.getElementById('totalBar').style.width=p+'%';
-let inc=data.income.reduce((s,x)=>s+x.amount,0);document.getElementById('income').textContent=fmt(inc);
-document.getElementById('debtList').innerHTML=data.debts.length?data.debts.map((d,i)=>{let q=d.total?Math.round(d.paid/d.total*100):0;return `<div class="debt"><div class="debt-top"><div class="debt-name">${escapeHtml(d.name)}</div><div class="debt-amount">${fmt(d.left)}</div></div><div class="mini"><i style="width:${q}%"></i></div><div class="row" style="font-size:12px;color:var(--muted);margin-bottom:10px"><span>${q}% выплачено</span><span>из ${fmt(d.total)}</span></div><div class="actions"><button class="primary" onclick="openSheet('pay',${i})">＋ Платёж</button><button onclick="deleteDebt(${i})">Удалить</button></div></div>`}).join(''):'<div class="card empty">Пока нет долгов. Добавь первое обязательство.</div>';
-document.getElementById('historyList').innerHTML=data.history.length?data.history.slice(0,50).map(x=>`<div><span>${escapeHtml(x.text)}<br><small style="color:var(--muted)">${x.date}</small></span><b style="color:${x.type==='pay'?'var(--good)':'var(--accent2)'}">${x.type==='pay'?'-':'+'}${fmt(x.amount)}</b></div>`).join(''):'<div class="empty">История пока пустая.</div>';
-document.getElementById('forecast').textContent=inc&&total?'При текущем доходе ты видишь общий финансовый прогресс: '+p+'% долгов уже закрыто.':'Добавь доходы и долги — здесь появится расчёт.';
-}
-function deleteDebt(i){if(confirm('Удалить этот долг?')){data.debts.splice(i,1);save()}}
-function resetAll(){if(confirm('Точно удалить все данные?')){localStorage.removeItem(KEY);location.reload()}}
-function exportData(){let a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='fingramate-data.json';a.click()}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-document.getElementById('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
-render();
-</script>
-</body>
-</html>
+function renderScenario(){let d=data.debts.reduce((s,x)=>s+x.left,0),a=+document.getElementById('scenario')?.value||0;if(!d||!a){if(document.getElementById('scenarioMonths'))document.getElementById('scenarioMonths').textContent='—';return}let m=Math.ceil(d/a);document.getElementById('scenarioMonths').textContent=m+' мес.';document.getElementById('scenarioText').textContent='При '+fmt(a)+' в месяц остаток '+fmt(d)+' можно закрыть примерно за '+m+' мес. без учёта процентов.'}
+function render(){document.documentElement.dataset.theme=data.theme;let mk=monthKey();let debt=data.debts.reduce((s,d)=>s+d.left,0),start=data.debts.reduce((s,d)=>s+d.total,0),paid=start-debt,inc=data.income.filter(x=>x.month===mk).reduce((s,x)=>s+x.amount,0),exp=data.expenses.filter(x=>x.month===mk).reduce((s,x)=>s+x.amount,0),p=start?Math.round(paid/start*100):0,pay=data.history.filter(x=>x.type==='pay'&&x.date.slice(0,7)===mk).reduce((s,x)=>s+x.amount,0);
+netDebt.textContent=fmt(debt);debtBar.style.width=p+'%';debtPct.textContent=p+'% долгов погашено';debtStart.textContent='из '+fmt(start);monthIncome.textContent=fmt(inc);monthExpense.textContent=fmt(exp);freeMoney.textContent=fmt(inc-exp);monthPayments.textContent=fmt(pay);debtCount.textContent=data.debts.length+' '+(data.debts.length===1?'долг':'долгов');
+forecast.textContent=debt?'Осталось '+fmt(debt)+' до полной финансовой свободы.':'🎉 Все текущие долги закрыты!';forecastSub.textContent=debt?'Задай темп платежей в разделе «Аналитика», чтобы увидеть срок.':'Можно сосредоточиться на накоплениях и целях.';
+debtList.innerHTML=data.debts.length?data.debts.map((d,i)=>{let q=d.total?Math.round(d.paid/d.total*100):0;return `<div class="debt"><div class="row"><div><h3>${esc(d.name)}</h3><span class="tag">${esc(d.who||'обязательство')}</span></div><div class="amount">${fmt(d.left)}</div></div><div class="bar"><i style="width:${q}%"></i></div><div class="row muted" style="font-size:12px"><span>${q}% погашено</span><span>было ${fmt(d.total)}</span></div><div class="actions"><button class="btn primary" onclick="openSheet('pay',${i})">＋ Платёж</button><button class="btn" onclick="deleteDebt(${i})">Удалить</button></div></div>`}).join(''):'<div class="card empty">Добавь первый долг — здесь появится его прогресс.</div>';
+let tx=data.history.slice(0,30);moneyList.innerHTML=tx.length?tx.map(x=>`<div class="tx"><div><b>${esc(x.text)}</b><div class="muted" style="font-size:12px;margin-top:3px">${new Date(x.date).toLocaleDateString('ru-RU')}</div></div><div class="sum ${x.type==='expense'?'negative':'positive'}">${x.type==='expense'?'-':'+'}${fmt(x.amount)}</div></div>`).join(''):'<div class="card empty">Операций пока нет.</div>';
+let avg=inc?Math.round(inc):0;stats.innerHTML=`<div class="miniCard"><div class="eyebrow">Долгов</div><b>${data.debts.length}</b></div><div class="miniCard"><div class="eyebrow">Погашено</div><b>${fmt(paid)}</b></div><div class="miniCard"><div class="eyebrow">Свободно</div><b>${fmt(inc-exp)}</b></div><div class="miniCard"><div class="eyebrow">Доход / мес.</div><b>${fmt(avg)}</b></div>`;
+goalList.innerHTML=data.goals.length?data.goals.map((g,i)=>{let q=g.total?Math.round(g.saved/g.total*100):0;return `<div class="goal"><div class="row"><div><h3>🎯 ${esc(g.name)}</h3><span class="muted">${fmt(g.saved)} из ${fmt(g.total)}</span></div><b>${q}%</b></div><div class="bar"><i style="width:${q}%"></i></div><div class="actions"><button class="btn primary" onclick="openSheet('goalpay',${i})">＋ Пополнить</button><button class="btn" onclick="deleteGoal(${i})">Удалить</button></div></div>`}).join(''):'<div class="card empty">Создай первую финансовую цель.</div>';renderScenario()}
+function exportData(){let a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='fingramate-backup.json';a.click()}
+function resetAll(){if(confirm('Удалить все данные FinGramate?')){localStorage.removeItem(KEY);location.reload()}}
+document.getElementById('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});render();
+</script></body></html>
