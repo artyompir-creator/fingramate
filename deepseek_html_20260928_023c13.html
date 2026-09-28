@@ -238,6 +238,7 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 <div class="card">
 <div class="sectionTitle" style="margin-top:0">Данные</div>
 <button class="btn" style="width:100%;margin-bottom:8px" onclick="exportData()">Экспортировать резервную копию</button>
+<button class="btn" style="width:100%;margin-bottom:8px" onclick="importData()">Импортировать из файла</button>
 <button class="btn danger" style="width:100%" onclick="resetAll()">Сбросить все данные</button>
 </div>
 <div class="card">
@@ -256,15 +257,66 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 <nav class="nav" id="navEl"><button class="active" data-idx="0"><svg class="navIcon" viewBox="0 0 24 24" fill="none"><path d="m3.5 10.5 8.5-7 8.5 7v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-8Z" fill="currentColor" opacity=".14"/><path d="m3.5 10.5 8.5-7 8.5 7M5.5 9v9.5a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 20.5v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><small>Главная</small></button><button data-idx="1"><svg class="navIcon" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" fill="currentColor" opacity=".12"/><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M7 10h6M7 14h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17" cy="12" r="2" fill="currentColor" opacity=".72"/></svg><small>Долги</small></button><button data-idx="2"><svg class="navIcon" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="3.5" fill="currentColor" opacity=".14"/><rect x="3" y="6" width="18" height="13" rx="3.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="14.5" r="1.4" fill="currentColor"/></svg><small>Деньги</small></button><button data-idx="3"><svg class="navIcon" viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m7 15 3-4 3 2 5-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><small>Аналитика</small></button><button data-idx="4"><svg class="navIcon" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="4" fill="currentColor" opacity=".12"/><rect x="4" y="3" width="16" height="18" rx="4" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="9" r="1.2" fill="currentColor"/><circle cx="12" cy="9" r="1.2" fill="currentColor"/><circle cx="16" cy="9" r="1.2" fill="currentColor"/><path d="M8 14h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 17h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".55"/></svg><small>Ещё</small></button></nav>
 <div class="sheet" id="sheet"><div class="modal"><button class="close" onclick="closeSheet()">×</button><div id="sheetContent"></div></div></div><div id="toast" class="toast"></div>
 <script>
+/* ============================================================
+   ХРАНИЛИЩЕ — единый ключ, больше никогда не меняем
+   + автоперенос со всех старых версий
+   ============================================================ */
+const KEY='fingramate_data';
+const LEGACY_KEYS=['fingramate_v7','fingramate_v6','fingramate_v5','fingramate_v4','fingramate_v3','fingramate_v2','fingramate_v1'];
+(function migrateLegacy(){
+  try{
+    if(localStorage.getItem(KEY)) return; // уже есть актуальные данные
+    for(const k of LEGACY_KEYS){
+      const raw=localStorage.getItem(k);
+      if(!raw) continue;
+      try{
+        const parsed=JSON.parse(raw);
+        if(parsed && typeof parsed==='object'){
+          // нормализуем структуру на всякий случай
+          const safe={
+            debts:Array.isArray(parsed.debts)?parsed.debts:[],
+            income:Array.isArray(parsed.income)?parsed.income:[],
+            expenses:Array.isArray(parsed.expenses)?parsed.expenses:[],
+            history:Array.isArray(parsed.history)?parsed.history:[],
+            goals:Array.isArray(parsed.goals)?parsed.goals:[],
+            theme:typeof parsed.theme==='string'?parsed.theme:'system',
+            period:parsed.period&&typeof parsed.period==='object'?parsed.period:undefined
+          };
+          localStorage.setItem(KEY,JSON.stringify(safe));
+          console.log('[FinGramate] данные перенесены из',k);
+          return;
+        }
+      }catch(e){ /* битый ключ — пропускаем */ }
+    }
+  }catch(e){}
+})();
+
+/* ============================================================
+   Инициализация данных
+   ============================================================ */
 const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand()}
-const KEY='fingramate_v7';
-let data=JSON.parse(localStorage.getItem(KEY)||'null')||{debts:[],income:[],expenses:[],history:[],goals:[],theme:'system'};
+let data;
+try{
+  const raw=localStorage.getItem(KEY);
+  data=raw?JSON.parse(raw):null;
+}catch(e){ data=null; }
+if(!data || typeof data!=='object'){
+  data={debts:[],income:[],expenses:[],history:[],goals:[],theme:'system'};
+}
+// санитайз всех полей на случай битых данных
+data.debts=Array.isArray(data.debts)?data.debts:[];
+data.income=Array.isArray(data.income)?data.income:[];
+data.expenses=Array.isArray(data.expenses)?data.expenses:[];
+data.history=Array.isArray(data.history)?data.history:[];
+data.goals=Array.isArray(data.goals)?data.goals:[];
+if(typeof data.theme!=='string') data.theme='system';
+
 const fmt=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽',now=()=>new Date(),pad=n=>String(n).padStart(2,'0');
 const dateKey=d=>{let x=new Date(d);return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())};
 const monthKeyFromDate=d=>{let x=new Date(d);return x.getFullYear()+'-'+pad(x.getMonth()+1)};
 const monthKey=()=>monthKeyFromDate(now());
 const defaultEntryDate=()=>data.period?.mode==='day'?data.period.value:dateKey(now());
-if(!data.period)data.period={mode:'month',value:monthKey()};
+if(!data.period || typeof data.period!=='object')data.period={mode:'month',value:monthKey()};
 const MONTHS_RU=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
 const MONTHS_RU_SHORT=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
 const monthName=k=>{let [y,m]=k.split('-').map(Number);return MONTHS_RU[m-1].replace(/^./,c=>c.toUpperCase())+' '+y};
@@ -304,7 +356,7 @@ function haptic(type){
   }catch(e){}
 }
 
-function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}render()}
 function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 
@@ -589,8 +641,67 @@ function render(){
   goalList.innerHTML=data.goals.length?data.goals.map((g,i)=>{let q=g.total?Math.round(g.saved/g.total*100):0;return `<div class="goal"><div class="row"><div><h3><svg class="sectionIcon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="currentColor" opacity=".1"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="m16.5 7.5 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>${esc(g.name)}</h3><span class="muted">${fmt(g.saved)} из ${fmt(g.total)}</span></div><b>${q}%</b></div><div class="bar"><i style="width:${q}%"></i></div><div class="actions"><button class="btn primary" onclick="openSheet('goalpay',${i})">＋ Пополнить</button><button class="btn" onclick="deleteGoal(${i})">Удалить</button></div></div>`}).join(''):'<div class="card empty">Начни первую финансовую цель</div>';
   renderScenario();
 }
-function exportData(){let a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='fingramate-backup.json';a.click()}
-function resetAll(){if(confirm('Удалить все данные FinGramate?')){localStorage.removeItem(KEY);location.reload()}}
+
+/* ============================================================
+   Экспорт / Импорт / Сброс
+   ============================================================ */
+function stamp(){
+  const d=now();
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+}
+function exportData(){
+  try{
+    const a=document.createElement('a');
+    a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));
+    a.download='fingramate_backup_'+stamp()+'.json';
+    a.click();
+    toast('Резервная копия сохранена');
+    haptic('success');
+  }catch(e){ toast('Не удалось сохранить'); haptic('error'); }
+}
+function importData(){
+  const inp=document.createElement('input');
+  inp.type='file';inp.accept='application/json,.json';
+  inp.onchange=function(){
+    const f=inp.files&&inp.files[0];
+    if(!f) return;
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        if(!parsed || typeof parsed!=='object') throw Error('bad');
+        if(!confirm('Импорт заменит все текущие данные. Продолжить?')) return;
+        data={
+          debts:Array.isArray(parsed.debts)?parsed.debts:[],
+          income:Array.isArray(parsed.income)?parsed.income:[],
+          expenses:Array.isArray(parsed.expenses)?parsed.expenses:[],
+          history:Array.isArray(parsed.history)?parsed.history:[],
+          goals:Array.isArray(parsed.goals)?parsed.goals:[],
+          theme:typeof parsed.theme==='string'?parsed.theme:'system',
+          period:parsed.period&&typeof parsed.period==='object'?parsed.period:{mode:'month',value:monthKey()}
+        };
+        save();
+        toast('Данные восстановлены');
+        haptic('success');
+      }catch(e){
+        toast('Файл повреждён или не подходит');
+        haptic('error');
+      }
+    };
+    reader.readAsText(f);
+  };
+  inp.click();
+}
+function resetAll(){
+  // Двойное подтверждение — защита от случайного тапа
+  if(!confirm('Сбросить все данные FinGramate? Это действие нельзя отменить.')) return;
+  if(!confirm('Точно? Все долги, доходы, расходы и цели будут удалены навсегда.')) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  // Чистим и старые ключи, чтобы при следующем запуске не «вернулись» данные из миграции
+  try{ LEGACY_KEYS.forEach(k=>localStorage.removeItem(k)); }catch(e){}
+  location.reload();
+}
+
 document.getElementById('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
 render();
 setScreen(0,{force:true,haptic:false});
