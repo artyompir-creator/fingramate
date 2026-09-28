@@ -15,11 +15,12 @@
   --good:#32d583; --bad:#ff647c;
   --shadow:0 10px 30px rgba(0,0,0,.28);
   --nav-bg:#160a14;
+  --c1:#d81b60; --c2:#ff4f91; --c3:#ff8fb1; --c4:#7c5cff; --c5:#4fc3f7;
+  --c6:#ffb74d; --c7:#81c784; --c8:#e57373; --c9:#ba68c8; --c10:#4db6ac;
 }
 html[data-base="light"]{
   --bg:#f5eef2; --bg2:#ffffff;
-  --card:#ffffff;
-  --card-soft:#fdf7fa;
+  --card:#ffffff; --card-soft:#fdf7fa;
   --line:rgba(120,40,80,.12);
   --text:#2a1620; --muted:#8a6a78;
   --shadow:0 8px 24px rgba(120,40,80,.10);
@@ -29,12 +30,9 @@ html[data-base="light"]{
 html{overscroll-behavior:none;-webkit-text-size-adjust:100%}
 html,body{overflow:hidden;height:100%}
 body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
+  margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",sans-serif;
-  letter-spacing:-.01em;
-  -webkit-tap-highlight-color:transparent;
+  letter-spacing:-.01em;-webkit-tap-highlight-color:transparent;
   transition:background .2s ease,color .2s ease;
 }
 body::before{
@@ -47,66 +45,28 @@ body::before{
 button,input,select{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}
 
 .app{
-  max-width:600px;margin:auto;
-  height:100vh;
-  height:100dvh;
+  max-width:600px;margin:auto;height:100vh;height:100dvh;
   display:flex;flex-direction:column;
   padding-top:env(safe-area-inset-top,0px);
 }
-.top{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:18px 16px 12px;
-  flex-shrink:0;
-}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 16px 12px;flex-shrink:0}
 .brand{font-size:24px;font-weight:700;letter-spacing:-.055em}
 .brand span{color:var(--a2)}
-.icon{
-  width:44px;height:44px;border:1px solid var(--line);border-radius:15px;
-  background:var(--card);
-  transition:transform .15s ease;
-}
+.icon{width:44px;height:44px;border:1px solid var(--line);border-radius:15px;background:var(--card);transition:transform .15s ease}
 
-/* Контейнер экранов: забирает всю высоту между шапкой и навигацией */
-.screens-viewport{
-  flex:1 1 auto;
-  overflow:hidden;
-  position:relative;
-  touch-action:pan-y;
-  min-height:0;
-}
-.screens-track{
-  display:flex;
-  width:500%;
-  height:100%;
-  transition:transform .4s cubic-bezier(.22,1,.36,1);
-  transform:translateZ(0);
-}
+.screens-viewport{flex:1 1 auto;overflow:hidden;position:relative;touch-action:pan-y;min-height:0}
+.screens-track{display:flex;width:500%;height:100%;transition:transform .4s cubic-bezier(.22,1,.36,1);transform:translateZ(0)}
 .screens-track.dragging{transition:none}
-
-/* Каждый экран — свой скролл, независимый */
 .screen{
-  width:20%;
-  flex:0 0 20%;
-  height:100%;
-  overflow-y:auto;
-  overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  opacity:.35;
-  transition:opacity .3s ease;
+  width:20%;flex:0 0 20%;height:100%;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;opacity:.35;transition:opacity .3s ease;
   padding:0 16px calc(112px + env(safe-area-inset-bottom,0px));
   scrollbar-width:none;-ms-overflow-style:none;
 }
 .screen::-webkit-scrollbar{display:none;width:0;height:0}
 .screen.active{opacity:1}
 
-.card{
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:22px;
-  padding:20px;margin-bottom:12px;
-  box-shadow:var(--shadow);
-  position:relative;
-}
+.card{border:1px solid var(--line);background:var(--card);border-radius:22px;padding:20px;margin-bottom:12px;box-shadow:var(--shadow);position:relative}
 .eyebrow{font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:550}
 .big{font-size:38px;font-weight:700;letter-spacing:-.06em;line-height:.98}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -116,12 +76,7 @@ button,input,select{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap
 .row{display:flex;justify-content:space-between;gap:10px;align-items:center}
 .progress{height:11px;background:rgba(128,128,128,.18);border-radius:99px;overflow:hidden;margin:16px 0 9px}
 .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:width .5s ease}
-.btn{
-  border:1px solid var(--line);background:var(--card-soft);
-  padding:12px 14px;border-radius:15px;
-  font-weight:550;letter-spacing:-.015em;
-  transition:transform .15s ease,background .15s ease;
-}
+.btn{border:1px solid var(--line);background:var(--card-soft);padding:12px 14px;border-radius:15px;font-weight:550;letter-spacing:-.015em;transition:transform .15s ease,background .15s ease}
 .primary{background:var(--a)!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
 .danger{color:var(--bad)!important}
 .muted{color:var(--muted)}
@@ -138,17 +93,12 @@ button,input,select{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap
 .positive{color:var(--good)}.negative{color:var(--bad)}
 
 .nav{
-  flex-shrink:0;
-  position:relative;
+  flex-shrink:0;position:relative;
   margin:0 10px calc(10px + env(safe-area-inset-bottom,0px));
-  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
-  padding:8px;border:1px solid var(--line);border-radius:22px;
-  background:var(--nav-bg);
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;
+  border:1px solid var(--line);border-radius:22px;background:var(--nav-bg);
   box-shadow:0 10px 30px rgba(0,0,0,.3);
-  max-width:570px;
-  align-self:center;
-  width:calc(100% - 20px);
-  z-index:5;
+  max-width:570px;align-self:center;width:calc(100% - 20px);z-index:5;
 }
 .nav button{border:0;background:none;color:var(--muted);padding:7px 2px;border-radius:14px;font-size:20px;position:relative;transition:color .2s ease,background .2s ease,transform .15s ease}
 .nav button small{font-size:10px}
@@ -157,14 +107,11 @@ button,input,select{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:20;opacity:0;transition:opacity .22s ease;touch-action:none}
 .sheet.open{display:flex;opacity:1}
 .modal{
-  width:min(600px,100%);margin:auto auto 0;
-  background:var(--bg2);
+  width:min(600px,100%);margin:auto auto 0;background:var(--bg2);
   border:1px solid var(--line);border-radius:26px 26px 0 0;
   padding:22px;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));
-  max-height:90vh;overflow:auto;
-  transform:translateY(24px);
-  transition:transform .28s cubic-bezier(.2,.85,.2,1);
-  touch-action:pan-y;
+  max-height:90vh;overflow:auto;transform:translateY(24px);
+  transition:transform .28s cubic-bezier(.2,.85,.2,1);touch-action:pan-y;
 }
 .sheet.open .modal{transform:translateY(0)}
 .sheet-dragging .modal{transition:none}
@@ -176,26 +123,15 @@ h2{margin:0 0 18px}
 .choice button{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);min-height:46px;font-weight:550}
 .choice button.sel{background:var(--a);color:#fff;border-color:transparent}
 .empty{text-align:center;color:var(--muted);padding:22px 8px}
-.toast{
-  position:fixed;z-index:30;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));
-  transform:translate(-50%,20px);opacity:0;
-  background:#171b26;color:#fff;padding:12px 16px;border-radius:14px;
-  transition:opacity .2s ease,transform .2s ease;pointer-events:none;
-}
+.toast{position:fixed;z-index:30;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:#171b26;color:#fff;padding:12px 16px;border-radius:14px;transition:opacity .2s ease,transform .2s ease;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 .btn,.icon,.nav button,.choice button,.periodDisplay,.periodArrow,
 .calcKey,.calcQuick button,.periodGrid button,.periodYearNav button,
-.scenarioPresets button,.debt,.goal,.tx,.dayRow button,[onclick]{
-  -webkit-tap-highlight-color:transparent;
-}
-.btn:active,.icon:active,.choice button:active,
-.periodDisplay:active,.periodArrow:active,
-.calcKey:active,.calcQuick button:active,.periodGrid button:active,
-.periodYearNav button:active,.scenarioPresets button:active,
-.debt:active,.goal:active,.tx:active,.dayRow button:active{
-  transform:scale(.96);
-}
+.scenarioPresets button,.debt,.goal,.tx,.dayRow button,[onclick]{-webkit-tap-highlight-color:transparent}
+.btn:active,.icon:active,.choice button:active,.periodDisplay:active,.periodArrow:active,
+.calcKey:active,.calcQuick button:active,.periodGrid button:active,.periodYearNav button:active,
+.scenarioPresets button:active,.debt:active,.goal:active,.tx:active,.dayRow button:active{transform:scale(.96)}
 .primary:active{transform:scale(.96);filter:brightness(1.06)}
 .nav button:active{transform:scale(.92)}
 
@@ -204,37 +140,69 @@ h2{margin:0 0 18px}
 input,select{transition:border-color .15s ease}
 input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent)}
 
-.periodCard{padding:17px}
-.periodMode{display:flex;gap:5px}
-.periodMode button{padding:8px 10px;font-size:12px}
-.periodMode button.sel{background:var(--a);color:#fff;border-color:transparent}
-.periodControls{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;margin-top:13px}
-.periodDisplay{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:12px 14px;border:1px solid var(--line);border-radius:15px;
-  background:var(--card-soft);color:var(--text);
-  font-size:15px;font-weight:550;cursor:pointer;
-  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.periodDisplay .caret{flex-shrink:0;opacity:.55}
-.periodArrow{padding:10px!important;font-size:20px;line-height:1;flex-shrink:0}
-.periodHint{font-size:12px;margin-top:9px}
-.periodTotal{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-.periodTotal:last-child{border-bottom:0}
-.dayRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);background:var(--card-soft);border-radius:16px;margin-bottom:8px;transition:transform .15s ease}
-.dayRow button{border:0;background:none;color:inherit;text-align:left;flex:1}
-.dayRow .dayMain{font-weight:650}
-.dayRow .dayDate{font-size:12px;color:var(--muted);margin-top:2px}
-.dayNumbers{text-align:right;font-size:12px}
-.dayNumbers b{display:block;font-size:14px}
-.dayNumbers span{color:var(--muted)}
-.periodGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.periodGrid button{padding:12px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--text);font-size:14px;font-weight:550}
-.periodGrid button.sel{background:var(--a);color:#fff;border-color:transparent}
-.periodYearNav{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;margin-bottom:6px}
-.periodYearNav button{padding:10px!important;font-size:18px}
-.periodYearNav b{text-align:center;font-size:16px}
+/* === СЕГМЕНТИРОВАННЫЙ КОНТРОЛ === */
+.segmented{display:flex;gap:2px;padding:4px;border-radius:14px;background:var(--card-soft);border:1px solid var(--line);overflow:hidden}
+.segmented button{flex:1;padding:10px 8px;border-radius:11px;border:0;background:none;color:var(--muted);font-size:13px;font-weight:600;transition:background .2s ease,color .2s ease}
+.segmented button.sel{background:var(--a);color:#fff}
 
+/* === АНАЛИТИКА === */
+.analyticsHead{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+.analyticsTotal{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.analyticsTotal .val{font-size:34px;font-weight:750;letter-spacing:-.06em}
+.analyticsTotal .delta{font-size:13px;font-weight:600;padding:4px 9px;border-radius:9px;background:rgba(128,128,128,.14)}
+.analyticsTotal .delta.up{color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.analyticsTotal .delta.down{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+
+.chartControls{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.chartType{display:flex;gap:2px;padding:4px;border-radius:12px;background:var(--card-soft);border:1px solid var(--line)}
+.chartType button{width:38px;height:34px;border-radius:9px;border:0;background:none;color:var(--muted);display:grid;place-items:center;transition:background .2s ease,color .2s ease}
+.chartType button.sel{background:var(--a);color:#fff}
+.chartType svg{width:18px;height:18px}
+
+.chartWrap{position:relative;width:100%;display:flex;justify-content:center;align-items:center;padding:6px 0 12px}
+.chartSvg{max-width:260px;width:100%;height:auto;overflow:visible}
+.donutCenter{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.donutCenter .c-val{font-size:18px;font-weight:700;letter-spacing:-.03em}
+.donutCenter .c-lab{font-size:11px;color:var(--muted);margin-top:2px}
+
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.legendItem{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:13px;background:var(--card-soft);border:1px solid var(--line);min-width:0}
+.legendDot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.legendText{flex:1;min-width:0}
+.legendText .l-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legendText .l-val{font-size:11px;color:var(--muted);margin-top:2px}
+
+.barsWrap{display:flex;align-items:flex-end;gap:2px;height:180px;padding:6px 2px 0}
+.barsWrap .barItem{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0;height:100%}
+.barsWrap .barRect{width:100%;max-width:22px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,var(--a2),var(--a));transition:height .5s cubic-bezier(.22,1,.36,1);min-height:2px}
+.barsWrap .barLabel{font-size:9px;color:var(--muted);margin-top:6px;height:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+.opDay{margin-top:10px}
+.opDayHeader{display:flex;justify-content:space-between;align-items:baseline;padding:6px 4px;margin-bottom:6px}
+.opDayHeader .d{font-size:14px;font-weight:700;letter-spacing:-.02em}
+.opDayHeader .sum{font-size:13px;color:var(--muted);font-weight:600}
+.opItem{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);background:var(--card-soft);border-radius:14px;margin-bottom:6px}
+.opIcon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;font-size:16px;font-weight:700;color:#fff}
+.opMain{flex:1;min-width:0}
+.opMain .t{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opMain .s{font-size:11px;color:var(--muted);margin-top:2px}
+.opSum{font-size:14px;font-weight:700;white-space:nowrap}
+
+/* === ГЛАВНАЯ: блок целей === */
+.goalMini{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;background:var(--card-soft);border:1px solid var(--line);margin-bottom:8px}
+.goalMini .gHead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.goalMini .gName{font-size:14px;font-weight:650;letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.goalMini .gPct{font-size:13px;font-weight:700;color:var(--a2);flex-shrink:0}
+.goalMini .gBar{height:6px;background:rgba(128,128,128,.18);border-radius:99px;overflow:hidden}
+.goalMini .gBar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:width .5s ease}
+.goalMini .gSums{font-size:11px;color:var(--muted);margin-top:2px}
+.goalAddBtn{width:100%;padding:12px;border-radius:14px;border:1px dashed var(--line);background:transparent;color:var(--muted);font-size:13px;font-weight:600}
+
+/* Быстрые действия 5 кнопок: 2x2 + 1 на всю ширину */
+.quickGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quickGrid .wide{grid-column:span 2}
+
+/* Scenario */
 .scenarioCard{padding:20px}
 .scenarioHero{display:flex;align-items:center;gap:14px;padding:4px 0 16px;border-bottom:1px solid var(--line)}
 .scenarioHeroIcon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;flex-shrink:0}
@@ -245,49 +213,20 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 .scenarioStat .k{font-size:11px;color:var(--muted);font-weight:550}
 .scenarioStat .v{font-size:16px;font-weight:700;letter-spacing:-.03em;margin-top:4px}
 .scenarioPresets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.scenarioPresets button{padding:11px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--text);font-size:12px;font-weight:600;transition:transform .15s ease,background .15s ease}
+.scenarioPresets button{padding:11px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--text);font-size:12px;font-weight:600}
 .scenarioPresets button.on{background:color-mix(in srgb,var(--a) 22%,transparent);border-color:color-mix(in srgb,var(--a) 45%,transparent);color:var(--a2)}
 .scenarioPresets button small{display:block;color:var(--muted);font-size:10px;margin-top:3px;font-weight:500}
-
-.scenarioSliderWrap{
-  margin-top:18px;position:relative;height:36px;
-  display:flex;align-items:center;
-  touch-action:none;
-  user-select:none;-webkit-user-select:none;
-  cursor:pointer;
-}
-.scenarioSliderTrack{
-  position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
-  height:6px;border-radius:99px;
-  background:rgba(128,128,128,.22);overflow:hidden;
-}
-.scenarioSliderFill{
-  height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,var(--a),var(--a2));
-  will-change:width;
-}
-.scenarioSliderThumb{
-  position:absolute;top:50%;left:0;
-  width:26px;height:26px;border-radius:50%;
-  background:var(--a);
-  border:3px solid var(--bg2);
-  transform:translate(-50%,-50%);
-  transition:transform .12s ease;
-  pointer-events:none;
-  will-change:left,transform;
-}
+.scenarioSliderWrap{margin-top:18px;position:relative;height:36px;display:flex;align-items:center;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.scenarioSliderTrack{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:6px;border-radius:99px;background:rgba(128,128,128,.22);overflow:hidden}
+.scenarioSliderFill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--a),var(--a2));will-change:width}
+.scenarioSliderThumb{position:absolute;top:50%;left:0;width:26px;height:26px;border-radius:50%;background:var(--a);border:3px solid var(--bg2);transform:translate(-50%,-50%);transition:transform .12s ease;pointer-events:none;will-change:left,transform}
 .scenarioSliderWrap.dragging .scenarioSliderThumb{transform:translate(-50%,-50%) scale(1.15)}
-
 .scenarioAmountRow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
 .scenarioAmountRow .hint{font-size:12px;color:var(--muted)}
 .scenarioAmountInput{width:130px!important;margin:0!important;padding:10px 12px!important;text-align:right;font-weight:650!important}
 .scenarioEmpty{text-align:center;padding:14px 6px 4px;color:var(--muted);font-size:13px}
 
-.nav button.active::after{
-  content:"";position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
-  width:4px;height:4px;border-radius:50%;background:var(--a2);
-  animation:pulseDot 2.5s ease-in-out infinite;pointer-events:none;
-}
+.nav button.active::after{content:"";position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--a2);animation:pulseDot 2.5s ease-in-out infinite;pointer-events:none}
 @keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
 
 .calcDisplay{background:rgba(0,0,0,.16);border:1px solid var(--line);border-radius:20px;padding:14px 16px;text-align:right;min-height:82px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
@@ -301,13 +240,38 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 .calcQuick button{padding:9px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--muted);font-size:12px}
 .calcHint{font-size:11px;color:var(--muted);margin-top:9px;text-align:center}
 
+.periodCard{padding:17px}
+.periodMode{display:flex;gap:5px}
+.periodMode button{padding:8px 10px;font-size:12px}
+.periodMode button.sel{background:var(--a);color:#fff;border-color:transparent}
+.periodControls{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;margin-top:13px}
+.periodDisplay{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:var(--card-soft);color:var(--text);font-size:15px;font-weight:550;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.periodDisplay .caret{flex-shrink:0;opacity:.55}
+.periodArrow{padding:10px!important;font-size:20px;line-height:1;flex-shrink:0}
+.periodHint{font-size:12px;margin-top:9px}
+.periodTotal{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.periodTotal:last-child{border-bottom:0}
+.dayRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);background:var(--card-soft);border-radius:16px;margin-bottom:8px}
+.dayRow button{border:0;background:none;color:inherit;text-align:left;flex:1}
+.dayRow .dayMain{font-weight:650}
+.dayRow .dayDate{font-size:12px;color:var(--muted);margin-top:2px}
+.dayNumbers{text-align:right;font-size:12px}
+.dayNumbers b{display:block;font-size:14px}
+.dayNumbers span{color:var(--muted)}
+.periodGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.periodGrid button{padding:12px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--text);font-size:14px;font-weight:550}
+.periodGrid button.sel{background:var(--a);color:#fff;border-color:transparent}
+.periodYearNav{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;margin-bottom:6px}
+.periodYearNav button{padding:10px!important;font-size:18px}
+.periodYearNav b{text-align:center;font-size:16px}
+
 .iconGlyph{width:21px;height:21px;display:inline-block;vertical-align:middle}
 .navIcon{width:24px;height:24px;display:block;margin:0 auto 3px}
 .actionIcon{width:19px;height:19px;vertical-align:-4px;margin-right:5px}
 .sectionIcon{width:18px;height:18px;vertical-align:-4px;margin-right:6px;opacity:.9}
 .nav button{font-weight:650}
 
-@media (max-width:520px){.big{font-size:36px}.card{padding:18px}.brand{font-size:23px}}
+@media (max-width:520px){.big{font-size:36px}.card{padding:18px}.brand{font-size:23px}.analyticsTotal .val{font-size:30px}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style></head>
 <body><div class="app">
@@ -316,21 +280,51 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 <div class="screens-viewport" id="screensViewport">
 <div class="screens-track" id="screensTrack">
 
+<!-- ============ ГЛАВНАЯ — ПЕРЕДЕЛАНА (Этап 2) ============ -->
 <section id="home" class="screen active">
-<div class="card"><div class="eyebrow">Финансовая свобода</div><div class="big" id="netDebt">0 ₽</div><div class="progress"><i id="debtBar"></i></div><div class="row"><span class="muted" id="debtPct">0% долгов погашено</span><span class="muted" id="debtStart">из 0 ₽</span></div></div>
-<div class="grid2"><div class="miniCard"><div class="eyebrow">Доходы</div><b id="monthIncome">0 ₽</b><small>за месяц</small></div><div class="miniCard"><div class="eyebrow">Расходы</div><b id="monthExpense">0 ₽</b><small>за месяц</small></div></div>
-<div class="grid2" style="margin-top:10px"><div class="miniCard"><div class="eyebrow">Свободно</div><b id="freeMoney">0 ₽</b><small>до платежей</small></div><div class="miniCard"><div class="eyebrow">Платежи</div><b id="monthPayments">0 ₽</b><small>за месяц</small></div></div>
-<div class="card" style="margin-top:12px"><div class="eyebrow">Ближайший ориентир</div><div id="forecast" style="font-size:18px;font-weight:750">Добавь долги и доходы — построим план</div><p class="muted" id="forecastSub" style="margin-bottom:0">Приложение будет считать примерный срок погашения</p></div>
-<div class="sectionTitle">Быстрые действия</div><div class="grid2">
-<button class="btn primary" onclick="openSheet('income')"><svg class="actionIcon" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5l-6 6M12 5l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Доход</button>
-<button class="btn" onclick="openSheet('expense')"><svg class="actionIcon" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M12 19l6-6M12 19l-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Расход</button>
-<button class="btn" onclick="openSheet('debt')"><svg class="actionIcon" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="3" fill="currentColor" opacity=".14"/><rect x="3" y="6" width="18" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="14" r="1.3" fill="currentColor"/></svg>Обязательство</button>
-<button class="btn" onclick="openSheet('goal')"><svg class="actionIcon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="currentColor" opacity=".12"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="m16.5 7.5 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Цель</button>
-</div>
+
+  <!-- Карточка «Финансовая свобода» -->
+  <div class="card">
+    <div class="eyebrow">Финансовая свобода</div>
+    <div class="big" id="netDebt">0 ₽</div>
+    <div class="progress"><i id="debtBar"></i></div>
+    <div class="row">
+      <span class="muted" id="debtPct">0% долгов погашено</span>
+      <span class="muted" id="debtStart">из 0 ₽</span>
+    </div>
+    <p class="muted" id="forecastHome" style="margin:12px 0 0;font-size:13px">Добавь долги — построим план</p>
+  </div>
+
+  <!-- Блок целей -->
+  <div class="sectionTitle" style="margin-top:6px">Цели</div>
+  <div id="homeGoals"></div>
+
+  <!-- Быстрые действия (5 кнопок) -->
+  <div class="sectionTitle">Быстрые действия</div>
+  <div class="quickGrid">
+    <button class="btn primary" onclick="openSheet('income')">
+      <svg class="actionIcon" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5l-6 6M12 5l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Доход
+    </button>
+    <button class="btn" onclick="openSheet('expense')">
+      <svg class="actionIcon" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M12 19l6-6M12 19l-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Расход
+    </button>
+    <button class="btn" onclick="openSheet('debt')">
+      <svg class="actionIcon" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="3" fill="currentColor" opacity=".14"/><rect x="3" y="6" width="18" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/><circle cx="16.5" cy="14" r="1.3" fill="currentColor"/></svg>Обязательство
+    </button>
+    <button class="btn" onclick="openSheet('goal')">
+      <svg class="actionIcon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="currentColor" opacity=".12"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="m16.5 7.5 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Цель
+    </button>
+    <button class="btn wide" onclick="openSheet('calculator')">
+      <svg class="actionIcon" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="3" fill="currentColor" opacity=".12"/><rect x="4" y="3" width="16" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><rect x="7" y="6" width="10" height="4" rx="1.2" fill="currentColor" opacity=".25"/><path d="M8 14h2m4 0h2M8 17h2m4 0h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Калькулятор
+    </button>
+  </div>
+
 </section>
 
+<!-- ============ ДОЛГИ ============ -->
 <section id="debts" class="screen"><div class="card"><div class="row"><div><div class="eyebrow">Обязательства</div><b id="debtCount">0 долгов</b></div><button class="icon" onclick="openSheet('debt')">＋</button></div></div><div id="debtList"></div></section>
 
+<!-- ============ ДЕНЬГИ ============ -->
 <section id="money" class="screen">
 <div class="card periodCard">
   <div class="row"><div><div class="eyebrow">Период учёта</div><b id="periodLabel">Сентябрь 2026</b></div><div class="choice periodMode"><button id="modeDay" onclick="setPeriodMode('day')">День</button><button id="modeMonth" onclick="setPeriodMode('month')">Месяц</button></div></div>
@@ -343,21 +337,72 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 <div class="sectionTitle">Операции за период</div><div id="moneyList"></div>
 </section>
 
+<!-- ============ АНАЛИТИКА ============ -->
 <section id="analytics" class="screen">
-<div class="card periodCard">
-  <div class="row"><div><div class="eyebrow">Аналитика периода</div><b id="analyticsPeriodLabel">Сентябрь 2026</b></div><div class="choice periodMode"><button id="analyticsModeDay" onclick="setPeriodMode('day')">День</button><button id="analyticsModeMonth" onclick="setPeriodMode('month')">Месяц</button></div></div>
-  <div class="periodControls"><button class="btn periodArrow" onclick="shiftPeriod(-1)">‹</button><button class="periodDisplay" onclick="openPeriodPicker()"><span id="analyticsPeriodDisplayText">сентябрь 2026</span><svg class="caret" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="btn periodArrow" onclick="shiftPeriod(1)">›</button></div>
+
+<div class="card" style="padding:16px">
+  <div class="eyebrow">Период</div>
+  <div class="segmented" id="anPeriodSeg">
+    <button data-p="day" onclick="setAnPeriod('day')">День</button>
+    <button data-p="week" onclick="setAnPeriod('week')">Неделя</button>
+    <button data-p="month" onclick="setAnPeriod('month')">Месяц</button>
+    <button data-p="year" onclick="setAnPeriod('year')">Год</button>
+  </div>
+  <div class="periodControls" style="margin-top:12px">
+    <button class="btn periodArrow" onclick="anShift(-1)">‹</button>
+    <button class="periodDisplay" onclick="openAnPicker()">
+      <span id="anPeriodLabel">Сентябрь 2026</span>
+      <svg class="caret" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="btn periodArrow" onclick="anShift(1)">›</button>
+  </div>
 </div>
-<div class="sectionTitle">Показатели</div><div id="stats" class="grid2"></div>
-<div class="card" style="margin-top:12px"><div class="eyebrow">Структура периода</div><div id="periodBreakdown"></div></div>
-<div class="sectionTitle">Дни выбранного месяца</div><div id="daysList"></div>
+
+<div class="card" style="padding:16px">
+  <div class="eyebrow">Показатель</div>
+  <div class="segmented" id="anCatSeg">
+    <button data-c="income" onclick="setAnCat('income')">Доходы</button>
+    <button data-c="expense" onclick="setAnCat('expense')">Расходы</button>
+    <button data-c="debt" onclick="setAnCat('debt')">Долги</button>
+    <button data-c="goal" onclick="setAnCat('goal')">Цели</button>
+  </div>
+</div>
+
+<div class="card" id="anChartCard">
+  <div class="analyticsHead">
+    <div class="eyebrow" id="anLabelTop">Расходы за период</div>
+    <div class="analyticsTotal">
+      <div class="val" id="anTotal">0 ₽</div>
+      <div class="delta" id="anDelta" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="chartControls">
+    <div class="chartType" id="anChartType">
+      <button data-type="donut" onclick="setAnChartType('donut')" title="Круговая">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="3"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="3" opacity=".5"/></svg>
+      </button>
+      <button data-type="bars" onclick="setAnChartType('bars')" title="Линейная">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-6M22 20H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="anChartBody"></div>
+  <div class="legend" id="anLegend"></div>
+</div>
+
 <div class="card scenarioCard" style="margin-top:12px">
   <div class="eyebrow">Сценарий погашения</div>
   <div id="scenarioBody"></div>
 </div>
-<div class="sectionTitle">Цели</div><div id="goalList"></div>
+
+<div class="sectionTitle">Операции за период</div>
+<div id="anOpsList"></div>
+
 </section>
 
+<!-- ============ ЕЩЁ ============ -->
 <section id="more" class="screen">
 <div class="card">
 <div class="sectionTitle" style="margin-top:0">Данные</div>
@@ -429,6 +474,7 @@ const defaultEntryDate=()=>data.period?.mode==='day'?data.period.value:dateKey(n
 if(!data.period || typeof data.period!=='object')data.period={mode:'month',value:monthKey()};
 const MONTHS_RU=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
 const MONTHS_RU_SHORT=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const WEEKDAYS_RU_SHORT=['пн','вт','ср','чт','пт','сб','вс'];
 const monthName=k=>{let [y,m]=k.split('-').map(Number);return MONTHS_RU[m-1].replace(/^./,c=>c.toUpperCase())+' '+y};
 const shortDate=k=>{let [y,m,d]=k.split('-').map(Number);return d+' '+MONTHS_RU_SHORT[m-1]+' '+y};
 const periodMatches=iso=>data.period.mode==='day'?dateKey(iso)===data.period.value:monthKeyFromDate(iso)===data.period.value;
@@ -485,7 +531,6 @@ function setScreen(idx,opts={}){
   track.style.transform=`translateX(-${idx*20}%)`;
   document.querySelectorAll('.screen').forEach((x,i)=>{
     x.classList.toggle('active',i===idx);
-    // Сбрасываем скролл у того экрана, на который переходим
     if(i===idx) x.scrollTop=0;
   });
   document.querySelectorAll('#navEl button').forEach((x,i)=>{x.classList.toggle('active',i===idx)});
@@ -498,19 +543,17 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
   btn.addEventListener('click',function(){ setScreen(+this.dataset.idx); });
 });
 
-/* === Свайп экранов: игнорируем жесты на [data-no-swipe] (ползунок) === */
+/* === Свайп экранов === */
 (function(){
   const viewport=document.getElementById('screensViewport');
   const track=document.getElementById('screensTrack');
   let startX=0,startY=0,deltaX=0,dragging=false,locked=null,startTime=0;
-
   viewport.addEventListener('touchstart',function(e){
     if(e.touches.length!==1) return;
     if(e.target.closest('[data-no-swipe]')){ dragging=false; locked='blocked'; return; }
     startX=e.touches[0].clientX;startY=e.touches[0].clientY;
     deltaX=0;dragging=true;locked=null;startTime=Date.now();
   },{passive:true});
-
   viewport.addEventListener('touchmove',function(e){
     if(!dragging) return;
     const x=e.touches[0].clientX, y=e.touches[0].clientY;
@@ -530,7 +573,6 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
     deltaX=dx;
     e.preventDefault();
   },{passive:false});
-
   viewport.addEventListener('touchend',function(){
     if(locked==='blocked'){ locked=null; return; }
     if(!dragging) return;
@@ -549,7 +591,6 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
     }
     locked=null;deltaX=0;
   },{passive:true});
-
   window.addEventListener('resize',()=>{
     track.style.transition='none';
     track.style.transform=`translateX(-${currentScreen*20}%)`;
@@ -585,6 +626,7 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
   },{passive:true});
 })();
 
+/* ================== КАЛЬКУЛЯТОР ================== */
 let calcState={expr:'',value:'0',justResult:false};
 function calcRender(){const e=document.getElementById('calcExpr'),v=document.getElementById('calcValue');if(e)e.textContent=calcState.expr||'';if(v)v.textContent=calcState.value}
 function calcSafeEval(expr){
@@ -619,6 +661,7 @@ function calculatorSheet(){return `<div class="sectionTitle" style="margin-top:0
 function calcQuick(kind){const raw=calcState.value.replace(/\s/g,'').replace(/,/g,'.');const n=Number(raw);if(!Number.isFinite(n)){toast('Сначала введи число');return}const pct=Number(String(kind).replace('%',''))/100;const result=n*pct;calcState={expr:`${n} × ${kind}`,value:new Intl.NumberFormat('ru-RU',{maximumFractionDigits:8}).format(result).replace(/\u00a0/g,' '),justResult:true};calcRender()}
 function bindCalculator(){calcRender();const root=document.getElementById('sheetContent');if(!root||root.dataset.calcBound==='1')return;root.dataset.calcBound='1';root.addEventListener('click',function(e){const key=e.target.closest('[data-calc]');if(key&&root.contains(key)){e.preventDefault();e.stopPropagation();calcPress(key.getAttribute('data-calc'));return}const quick=e.target.closest('[data-cquick]');if(quick&&root.contains(quick)){e.preventDefault();e.stopPropagation();calcQuick(quick.getAttribute('data-cquick'))}})}
 
+/* ================== ПИКЕР ПЕРИОДА ================== */
 let pickerYear=null;
 function openPeriodPicker(){const [y]=data.period.value.split('-').map(Number);pickerYear=y;renderPeriodPicker();document.getElementById('sheet').classList.add('open')}
 function renderPeriodPicker(){
@@ -644,12 +687,13 @@ function pickMonth(m){data.period.value=pickerYear+'-'+pad(m);closeSheet();save(
 function pickDayMonth(m){if(!pickerYear)return;const last=new Date(pickerYear,m,0).getDate();let d=+data.period.value.split('-')[2]||1;if(d>last)d=last;data.period.value=pickerYear+'-'+pad(m)+'-'+pad(d);renderPeriodPicker()}
 function pickDay(d){const [y,m]=data.period.value.split('-').map(Number);data.period.value=y+'-'+pad(m)+'-'+pad(d);closeSheet();save()}
 
+/* ================== ШТОРКИ ================== */
 function openSheet(type,id){let c='';
 if(type==='income')c=`<h2>＋ Добавить доход</h2><label>Сумма</label><input id="amount" type="number" placeholder="60000"><label>Источник</label><input id="source" placeholder="Работа, подработка..."><label>Дата</label><input id="entryDate" type="date" value="${defaultEntryDate()}"><button class="btn primary" style="width:100%" onclick="addIncome()">Сохранить доход</button>`;
 if(type==='expense')c=`<h2>− Добавить расход</h2><label>Сумма</label><input id="amount" type="number" placeholder="2500"><label>Категория</label><select id="category"><option>Еда</option><option>Жильё</option><option>Транспорт</option><option>Связь</option><option>Развлечения</option><option>Другое</option></select><label>Дата</label><input id="entryDate" type="date" value="${defaultEntryDate()}"><button class="btn primary" style="width:100%" onclick="addExpense()">Сохранить расход</button>`;
 if(type==='debt')c=`<h2>＋ Новый долг</h2><label>Название</label><input id="dname" placeholder="Кредитная карта"><label>Кому / организация</label><input id="dwho" placeholder="Банк, друг..."><label>Общая сумма</label><input id="damount" type="number" placeholder="70000"><label>Минимальный платёж</label><input id="dmin" type="number" placeholder="3500"><label>Дата следующего платежа</label><input id="ddate" type="date"><button class="btn primary" style="width:100%" onclick="addDebt()">Добавить долг</button>`;
 if(type==='pay')c=`<h2>＋ Платёж</h2><div class="eyebrow">${esc(data.debts[id].name)}</div><div class="big">${fmt(data.debts[id].left)}</div><label>Сумма платежа</label><input id="amount" type="number" placeholder="5000"><label>Дата платежа</label><input id="entryDate" type="date" value="${defaultEntryDate()}"><button class="btn primary" style="width:100%" onclick="pay(${id})">Засчитать платёж</button>`;
-if(type==='goal')c=`<h2>🎯 Новая цель</h2><label>Название</label><input id="gname" placeholder="Подушка, мотоцикл..."><label>Сумма цели</label><input id="gtotal" type="number" placeholder="100000"><button class="btn primary" style="width:100%" onclick="addGoal()">Создать цель</button>`;
+if(type==='goal')c=`<h2>Новая цель</h2><label>Название</label><input id="gname" placeholder="Подушка, мотоцикл..."><label>Сумма цели</label><input id="gtotal" type="number" placeholder="100000"><button class="btn primary" style="width:100%" onclick="addGoal()">Создать цель</button>`;
 if(type==='goalpay')c=`<h2>Пополнить цель</h2><div class="eyebrow">${esc(data.goals[id].name)}</div><label>Сумма</label><input id="amount" type="number" placeholder="5000"><label>Дата</label><input id="entryDate" type="date" value="${defaultEntryDate()}"><button class="btn primary" style="width:100%" onclick="goalPay(${id})">Пополнить</button>`;
 if(type==='calculator')c=calculatorSheet();
 if(type==='settings'){
@@ -667,65 +711,233 @@ function goalPay(i){let a=+amount.value;if(!a||a<=0)return;let d=entryDate.value
 function deleteDebt(i){if(confirm('Удалить долг?')){data.debts.splice(i,1);save();haptic('success')}}
 function deleteGoal(i){if(confirm('Удалить цель?')){data.goals.splice(i,1);save();haptic('success')}}
 function setTheme(t){data.theme=t;applyTheme();save();openSheet('settings');haptic('select')}
+
+/* ================== ЭКРАН «ДЕНЬГИ» ================== */
 function setPeriodMode(mode){data.period.mode=mode;if(mode==='month'&&/^\d{4}-\d{2}-\d{2}$/.test(data.period.value))data.period.value=data.period.value.slice(0,7);if(mode==='day'&&/^\d{4}-\d{2}$/.test(data.period.value))data.period.value=data.period.value+'-01';save();haptic('select')}
 function shiftPeriod(delta){if(data.period.mode==='day'){let d=new Date(data.period.value+'T12:00:00');d.setDate(d.getDate()+delta);data.period.value=dateKey(d)}else{let [y,m]=data.period.value.split('-').map(Number),d=new Date(y,m-1+delta,1);data.period.value=d.getFullYear()+'-'+pad(d.getMonth()+1)}save();haptic('light')}
 function renderPeriodUI(){
   let mode=data.period.mode,label=periodLabel();
   let shortLabel=data.period.mode==='day'?shortDate(data.period.value):MONTHS_RU[+data.period.value.split('-')[1]-1]+' '+data.period.value.split('-')[0];
-  ['periodLabel','analyticsPeriodLabel'].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=label});
+  ['periodLabel'].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=label});
   let pd=document.getElementById('periodDisplayText');if(pd)pd.textContent=shortLabel;
-  let apd=document.getElementById('analyticsPeriodDisplayText');if(apd)apd.textContent=shortLabel;
-  ['modeDay','analyticsModeDay'].forEach(id=>{let e=document.getElementById(id);if(e)e.classList.toggle('sel',mode==='day')});
-  ['modeMonth','analyticsModeMonth'].forEach(id=>{let e=document.getElementById(id);if(e)e.classList.toggle('sel',mode==='month')});
+  ['modeDay'].forEach(id=>{let e=document.getElementById(id);if(e)e.classList.toggle('sel',mode==='day')});
+  ['modeMonth'].forEach(id=>{let e=document.getElementById(id);if(e)e.classList.toggle('sel',mode==='month')});
   let hint=document.getElementById('periodHint');if(hint)hint.textContent=mode==='day'?'Все операции за выбранный день':'Все операции за выбранный месяц';
 }
 function periodTotals(){let income=data.income.filter(x=>periodMatches(x.date)).reduce((s,x)=>s+x.amount,0);let expense=data.expenses.filter(x=>periodMatches(x.date)).reduce((s,x)=>s+x.amount,0);let payments=data.history.filter(x=>x.type==='pay'&&periodMatches(x.date)).reduce((s,x)=>s+x.amount,0);let goals=data.history.filter(x=>x.type==='goal'&&periodMatches(x.date)).reduce((s,x)=>s+x.amount,0);return {income,expense,payments,goals,balance:income-expense-payments-goals}}
 function renderPeriodAnalytics(){
   renderPeriodUI();let t=periodTotals();
   let pi=document.getElementById('periodIncome'),pe=document.getElementById('periodExpense'),pp=document.getElementById('periodPayments'),pb=document.getElementById('periodBalance');
-  if(pi)pi.textContent=fmt(t.income);if(pe)pe.textContent=fmt(t.expense);if(pp)pp.textContent=fmt(t.payments);if(pb){pb.textContent=fmt(t.balance);pb.className=t.balance>=0?'positive':'negative'}
-  let statsEl=document.getElementById('stats');
-  if(statsEl)statsEl.innerHTML=`<div class="miniCard"><div class="eyebrow">Доходы</div><b>${fmt(t.income)}</b><small>${data.period.mode==='day'?'за день':'за месяц'}</small></div><div class="miniCard"><div class="eyebrow">Расходы</div><b>${fmt(t.expense)}</b><small>${data.period.mode==='day'?'за день':'за месяц'}</small></div><div class="miniCard"><div class="eyebrow">Долги</div><b>${fmt(t.payments)}</b><small>платежи</small></div><div class="miniCard"><div class="eyebrow">Чистый итог</div><b class="${t.balance>=0?'positive':'negative'}">${fmt(t.balance)}</b><small>после операций</small></div>`;
-  let breakdown=document.getElementById('periodBreakdown');
-  if(breakdown){let cats={};data.expenses.filter(x=>periodMatches(x.date)).forEach(x=>cats[x.category]=(cats[x.category]||0)+x.amount);let rows=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="periodTotal"><span>${esc(k)}</span><b>${fmt(v)}</b></div>`).join('');breakdown.innerHTML=rows||'<div class="empty">Расходов за этот период нет</div>'}
-  let days=document.getElementById('daysList');
-  if(days){
-    if(data.period.mode==='month'){
-      let [y,m]=data.period.value.split('-').map(Number),last=new Date(y,m,0).getDate(),rows=[];
-      for(let d=1;d<=last;d++){
-        let k=`${y}-${pad(m)}-${pad(d)}`,inc=data.income.filter(x=>dateKey(x.date)===k).reduce((s,x)=>s+x.amount,0),exp=data.expenses.filter(x=>dateKey(x.date)===k).reduce((s,x)=>s+x.amount,0),pay=data.history.filter(x=>x.type==='pay'&&dateKey(x.date)===k).reduce((s,x)=>s+x.amount,0);
-        if(inc||exp||pay)rows.push(`<div class="dayRow"><button onclick="selectDay('${k}')"><div class="dayMain">${d} ${MONTHS_RU_SHORT[m-1]}</div><div class="dayDate">${inc?'доход '+fmt(inc):''}${inc&&exp?' · ':''}${exp?'расход '+fmt(exp):''}${pay?' · платёж '+fmt(pay):''}</div></button><div class="dayNumbers"><b>${fmt(inc-exp-pay)}</b><span>итог</span></div></div>`);
-      }
-      days.innerHTML=rows.join('')||'<div class="card empty">В этом месяце пока нет операций</div>';
-    }else days.innerHTML='<div class="card empty">Переключись на месяц, чтобы увидеть разбивку по дням</div>';
+  if(pi)pi.textContent=fmt(t.income);if(pe)pe.textContent=fmt(t.expense);if(pp)pp.textContent=fmt(t.payments);
+  if(pb){pb.textContent=fmt(t.balance);pb.className=t.balance>=0?'positive':'negative'}
+  let tx=data.history.filter(x=>periodMatches(x.date)).slice(0,100);
+  moneyList.innerHTML=tx.length?tx.map(x=>`<div class="tx"><div><b>${esc(x.text)}</b><div class="muted" style="font-size:12px;margin-top:3px">${new Date(x.date).toLocaleDateString('ru-RU')}</div></div><div class="sum ${x.type==='expense'?'negative':x.type==='pay'?'negative':'positive'}">${x.type==='expense'||x.type==='pay'?'-':'+'}${fmt(x.amount)}</div></div>`).join(''):'<div class="card empty">Операций за выбранный период нет</div>';
+}
+
+/* ================== АНАЛИТИКА ================== */
+const AN = {period:'month',cat:'expense',chart:'donut',date:new Date()};
+AN.date.setHours(12,0,0,0);
+const COLORS = ['#d81b60','#ff4f91','#7c5cff','#4fc3f7','#ffb74d','#81c784','#e57373','#ba68c8','#4db6ac','#ff8fb1'];
+
+function anGetRange(offset=0){
+  const d=new Date(AN.date);d.setHours(12,0,0,0);
+  if(AN.period==='day'){d.setDate(d.getDate()+offset);const s=new Date(d);s.setHours(0,0,0,0);const e=new Date(d);e.setHours(23,59,59,999);return {start:s,end:e}}
+  if(AN.period==='week'){const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day+offset*7);const s=new Date(d);s.setHours(0,0,0,0);const e=new Date(d);e.setDate(e.getDate()+6);e.setHours(23,59,59,999);return {start:s,end:e}}
+  if(AN.period==='month'){d.setMonth(d.getMonth()+offset,1);const s=new Date(d.getFullYear(),d.getMonth(),1,0,0,0,0);const e=new Date(d.getFullYear(),d.getMonth()+1,0,23,59,59,999);return {start:s,end:e}}
+  d.setFullYear(d.getFullYear()+offset,0,1);const s=new Date(d.getFullYear(),0,1,0,0,0,0);const e=new Date(d.getFullYear(),11,31,23,59,59,999);return {start:s,end:e};
+}
+function anLabel(){
+  const {start,end}=anGetRange(0);
+  if(AN.period==='day') return new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric'}).format(start);
+  if(AN.period==='week'){const f=new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short'});return f.format(start)+' – '+f.format(end)}
+  if(AN.period==='month') return new Intl.DateTimeFormat('ru-RU',{month:'long',year:'numeric'}).format(start).replace(/^./,c=>c.toUpperCase());
+  return String(start.getFullYear());
+}
+function anFilterByCat(isoDate, cat){
+  const k = dateKey(isoDate);
+  if(cat==='income') return data.income.filter(x=>dateKey(x.date)===k).map(x=>({date:k,amount:x.amount,name:x.source||'Доход'}));
+  if(cat==='expense') return data.expenses.filter(x=>dateKey(x.date)===k).map(x=>({date:k,amount:x.amount,name:x.category||'Расход'}));
+  if(cat==='debt') return data.history.filter(x=>x.type==='pay'&&dateKey(x.date)===k).map(x=>({date:k,amount:x.amount,name:(x.text||'').replace(/^Платёж:\s*/,'')||'Платёж'}));
+  return data.history.filter(x=>x.type==='goal'&&dateKey(x.date)===k).map(x=>({date:k,amount:x.amount,name:(x.text||'').replace(/^Цель:\s*/,'')||'Цель'}));
+}
+function anOpsInRange(){
+  const {start,end}=anGetRange(0);const out=[];const cursor=new Date(start);
+  while(cursor<=end){const k=dateKey(cursor);for(const o of anFilterByCat(k,AN.cat)) out.push(o);cursor.setDate(cursor.getDate()+1)}
+  return out;
+}
+function anSumRange(offset=0){
+  const {start,end}=anGetRange(offset);let sum=0;const cursor=new Date(start);
+  while(cursor<=end){sum+=anFilterByCat(dateKey(cursor),AN.cat).reduce((s,o)=>s+o.amount,0);cursor.setDate(cursor.getDate()+1)}
+  return sum;
+}
+function anGroupByCat(ops){
+  const m=new Map();
+  for(const o of ops){const key=o.name||'Прочее';m.set(key,(m.get(key)||0)+o.amount)}
+  const arr=[...m.entries()].map(([name,amount])=>({name,amount})).sort((a,b)=>b.amount-a.amount);
+  if(arr.length>6){const top=arr.slice(0,5);const rest=arr.slice(5).reduce((s,x)=>s+x.amount,0);if(rest>0) top.push({name:'Остальное',amount:rest});return top}
+  return arr;
+}
+function anBarsData(){
+  const {start,end}=anGetRange(0);const out=[];const cursor=new Date(start);
+  while(cursor<=end){out.push({label:dateKey(cursor),sum:anFilterByCat(dateKey(cursor),AN.cat).reduce((s,o)=>s+o.amount,0)});cursor.setDate(cursor.getDate()+1)}
+  return out;
+}
+function anRenderChart(){
+  const body=document.getElementById('anChartBody'),legend=document.getElementById('anLegend');
+  if(!body) return;
+  const ops=anOpsInRange();const total=ops.reduce((s,o)=>s+o.amount,0);
+  if(!ops.length || total<=0){body.innerHTML=`<div class="empty">Операций по этой статье за период нет</div>`;legend.innerHTML='';return}
+  if(AN.chart==='donut'){
+    const groups=anGroupByCat(ops);
+    body.innerHTML=anRenderDonut(groups,total);
+    legend.innerHTML=anRenderLegend(groups,total);
+  } else {
+    body.innerHTML=anRenderBars(anBarsData());
+    legend.innerHTML='';
   }
 }
-function selectDay(k){data.period.mode='day';data.period.value=k;save();setScreen(2);haptic('select')}
+function anRenderDonut(groups,total){
+  const size=220,cx=size/2,cy=size/2,r=size/2-16,sw=24,circ=2*Math.PI*r;let acc=0,segs='';
+  groups.forEach((g,i)=>{const frac=g.amount/total,dash=frac*circ,gap=circ-dash,off=-acc*circ,col=COLORS[i%COLORS.length];
+    segs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${off}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    acc+=frac;});
+  const mainPct=Math.round(groups[0].amount/total*100);
+  return `<div class="chartWrap"><svg class="chartSvg" viewBox="0 0 ${size} ${size}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(128,128,128,.14)" stroke-width="${sw}"/>${segs}</svg><div class="donutCenter"><div class="c-val">${mainPct}%</div><div class="c-lab">${esc(groups[0].name)}</div></div></div>`;
+}
+function anRenderLegend(groups,total){
+  return groups.map((g,i)=>{const col=COLORS[i%COLORS.length],pct=Math.round(g.amount/total*100);
+    return `<div class="legendItem"><span class="legendDot" style="background:${col}"></span><div class="legendText"><div class="l-name">${esc(g.name)}</div><div class="l-val">${fmt(g.amount)} · ${pct}%</div></div></div>`;
+  }).join('');
+}
+function anRenderBars(bars){
+  const max=Math.max(...bars.map(b=>b.sum),1);
+  const arr=bars.map((b,i)=>{
+    const pct=(b.sum/max)*100;let label='';const d=new Date(b.label+'T12:00:00');
+    if(AN.period==='month') label=b.label.split('-')[2];
+    else if(AN.period==='year') label=MONTHS_RU_SHORT[d.getMonth()];
+    else if(AN.period==='week') label=WEEKDAYS_RU_SHORT[(d.getDay()+6)%7];
+    else label=WEEKDAYS_RU_SHORT[(d.getDay()+6)%7];
+    return `<div class="barItem" title="${fmt(b.sum)}"><div class="barRect" style="height:${pct}%;background:${COLORS[i%COLORS.length]}"></div><div class="barLabel">${label}</div></div>`;
+  }).join('');
+  return `<div class="barsWrap">${arr}</div>`;
+}
+function renderAnalytics(){
+  document.querySelectorAll('#anPeriodSeg button').forEach(b=>b.classList.toggle('sel',b.dataset.p===AN.period));
+  document.querySelectorAll('#anCatSeg button').forEach(b=>b.classList.toggle('sel',b.dataset.c===AN.cat));
+  document.querySelectorAll('#anChartType button').forEach(b=>b.classList.toggle('sel',b.dataset.type===AN.chart));
+  const lbl=document.getElementById('anPeriodLabel');if(lbl) lbl.textContent=anLabel();
+  const map={income:'Доходы',expense:'Расходы',debt:'Платежи по долгам',goal:'Пополнения целей'};
+  const top=document.getElementById('anLabelTop');if(top) top.textContent=map[AN.cat]+' за период';
+  const sum=anSumRange(0),sumPrev=anSumRange(-1);
+  const el=document.getElementById('anTotal');if(el) el.textContent=fmt(sum);
+  const dEl=document.getElementById('anDelta');
+  if(dEl){
+    if(sumPrev>0){
+      const diff=sum-sumPrev;const pct=Math.round(Math.abs(diff)/sumPrev*100);
+      dEl.style.display='';dEl.className='delta '+(diff>0?'up':'down');
+      dEl.textContent=(diff>0?'↑ ':'↓ ')+Math.abs(pct)+'% к прошлому';
+    } else dEl.style.display='none';
+  }
+  anRenderChart();
+  renderScenario();
+  renderAnOps();
+}
+function renderAnOps(){
+  const wrap=document.getElementById('anOpsList');if(!wrap) return;
+  const {start,end}=anGetRange(0);const byDay=new Map();const cursor=new Date(start);
+  while(cursor<=end){const k=dateKey(cursor);const list=anFilterByCat(k,AN.cat);if(list.length) byDay.set(k,list);cursor.setDate(cursor.getDate()+1)}
+  if(!byDay.size){wrap.innerHTML='<div class="card empty">Операций по этой статье нет</div>';return}
+  const arr=[...byDay.entries()].sort((a,b)=>b[0].localeCompare(a[0]));
+  wrap.innerHTML=arr.map(([k,list])=>{
+    const daySum=list.reduce((s,o)=>s+o.amount,0);const d=new Date(k+'T12:00:00');
+    const today=dateKey(now()),yesterday=dateKey(new Date(Date.now()-86400000));
+    let dayLabel; if(k===today) dayLabel='Сегодня'; else if(k===yesterday) dayLabel='Вчера';
+    else dayLabel=new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(d);
+    const items=list.map(o=>{
+      const col=colorForName(o.name);
+      return `<div class="opItem"><div class="opIcon" style="background:${col}">${esc(o.name).charAt(0).toUpperCase()}</div><div class="opMain"><div class="t">${esc(o.name)}</div><div class="s">${esc(mapCatLabel())}</div></div><div class="opSum">${fmt(o.amount)}</div></div>`;
+    }).join('');
+    return `<div class="opDay"><div class="opDayHeader"><div class="d">${dayLabel}</div><div class="sum">${fmt(daySum)}</div></div>${items}</div>`;
+  }).join('');
+}
+function mapCatLabel(){return {income:'Доход',expense:'Расход',debt:'Платёж по долгу',goal:'Пополнение цели'}[AN.cat]||''}
+function colorForName(name){let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))%360;return `hsl(${h} 55% 55%)`}
+function setAnPeriod(p){AN.period=p;haptic('select');renderAnalytics()}
+function setAnCat(c){AN.cat=c;haptic('select');renderAnalytics()}
+function setAnChartType(t){AN.chart=t;haptic('select');renderAnalytics()}
+function anShift(dir){
+  if(AN.period==='day') AN.date.setDate(AN.date.getDate()+dir);
+  else if(AN.period==='week') AN.date.setDate(AN.date.getDate()+dir*7);
+  else if(AN.period==='month') AN.date.setMonth(AN.date.getMonth()+dir,1);
+  else AN.date.setFullYear(AN.date.getFullYear()+dir,0,1);
+  haptic('light');renderAnalytics();
+}
+function openAnPicker(){
+  pickerYear=AN.date.getFullYear();
+  const modeMap={day:'day',week:'day',month:'month',year:'year'};
+  const _mode=modeMap[AN.period];
+  if(_mode==='year'){
+    let html=`<h2>Выбрать год</h2>`;
+    html+=`<div class="periodYearNav"><button class="btn" onclick="changeAnPickerYear(-1)">‹</button><b>${pickerYear}</b><button class="btn" onclick="changeAnPickerYear(1)">›</button></div>`;
+    html+=`<div class="periodGrid" style="grid-template-columns:repeat(3,1fr)">`;
+    for(let i=-3;i<=3;i++){const y=pickerYear+i;const sel=y===AN.date.getFullYear()?'sel':'';html+=`<button class="${sel}" onclick="pickAnYear(${y})">${y}</button>`}
+    html+='</div>';
+    document.getElementById('sheetContent').innerHTML=html;
+    document.getElementById('sheet').classList.add('open');
+    return;
+  }
+  data.period.mode=_mode;
+  data.period.value=_mode==='day'?dateKey(AN.date):AN.date.getFullYear()+'-'+pad(AN.date.getMonth()+1);
+  const _isAn=true;
+  anPickerOpen=true;
+  renderPeriodPicker();
+  document.getElementById('sheet').classList.add('open');
+}
+let anPickerOpen=false;
+function changeAnPickerYear(d){pickerYear+=d;openAnPicker()}
+function pickAnYear(y){AN.date=new Date(y,0,1,12);closeSheet();renderAnalytics()}
 
-let scenario = {monthly: 0, preset: null, initialized: false};
+/* Перехватываем выбор из пикера, чтобы понять: открыт из «Аналитики» или из «Денег» */
+const _pickMonth=pickMonth, _pickDay=pickDay;
+pickMonth=function(m){
+  data.period.value=pickerYear+'-'+pad(m);
+  if(anPickerOpen){
+    anPickerOpen=false;
+    AN.date=new Date(pickerYear,m-1,1,12);
+    closeSheet();renderAnalytics();return;
+  }
+  closeSheet();save();
+};
+pickDay=function(d){
+  const [y,m]=data.period.value.split('-').map(Number);
+  data.period.value=y+'-'+pad(m)+'-'+pad(d);
+  if(anPickerOpen){
+    anPickerOpen=false;
+    AN.date=new Date(y,m-1,d,12);
+    closeSheet();renderAnalytics();return;
+  }
+  closeSheet();save();
+};
+
+/* ================== СЦЕНАРИЙ ================== */
+let scenario = {monthly:0,preset:null,initialized:false};
 function initScenarioIfNeeded(){
   if(scenario.initialized) return;
   const debt=data.debts.reduce((s,d)=>s+d.left,0);
   const inc=data.income.filter(x=>x.month===monthKey()).reduce((s,x)=>s+x.amount,0);
-  if(debt<=0){ scenario.monthly=0; }
-  else {
-    const base = inc>0 ? Math.max(3000, Math.round(inc*0.15)) : 30000;
-    scenario.monthly = Math.min(base, debt);
-  }
+  if(debt<=0){scenario.monthly=0}
+  else{const base=inc>0?Math.max(3000,Math.round(inc*0.15)):30000;scenario.monthly=Math.min(base,debt)}
   scenario.initialized=true;
 }
 function computeScenario(){
   const debt=data.debts.reduce((s,d)=>s+d.left,0);
   const monthly=scenario.monthly||0;
   if(!debt||!monthly) return {debt,monthly,months:0,payoff:'—'};
-  const months=Math.ceil(debt/monthly);
-  const d=new Date();d.setMonth(d.getMonth()+months);
-  const payoff=MONTHS_RU_SHORT[d.getMonth()]+' '+d.getFullYear();
-  return {debt,monthly,months,payoff};
+  const months=Math.ceil(debt/monthly);const d=new Date();d.setMonth(d.getMonth()+months);
+  return {debt,monthly,months,payoff:MONTHS_RU_SHORT[d.getMonth()]+' '+d.getFullYear()};
 }
 function renderScenario(){
-  const body=document.getElementById('scenarioBody');
-  if(!body) return;
+  const body=document.getElementById('scenarioBody');if(!body) return;
   initScenarioIfNeeded();
   const debt=data.debts.reduce((s,d)=>s+d.left,0);
   if(!debt){body.innerHTML=`<div class="scenarioEmpty">Пока нет активных обязательств — добавь долг, и здесь появится план погашения</div>`;return}
@@ -736,7 +948,7 @@ function renderScenario(){
     {key:'max',label:'Максимум',val:inc?Math.max(5000,Math.round(inc*.4)):60000}
   ];
   const res=computeScenario();
-  const rangeMax=Math.max(200000, debt, scenario.monthly*1.2);
+  const rangeMax=Math.max(200000,debt,scenario.monthly*1.2);
   body.innerHTML=`
     <div class="scenarioHero">
       <div class="scenarioHeroIcon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M7 8h7a3 3 0 1 1 0 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -764,111 +976,78 @@ function bindScenarioSlider(){
   let active=false;
   function valueFromX(clientX){
     const rect=wrap.getBoundingClientRect();
-    const ratio=Math.max(0, Math.min(1, (clientX-rect.left)/rect.width));
-    const min=+wrap.dataset.min, max=+wrap.dataset.max, step=+wrap.dataset.step;
-    const raw=min + ratio*(max-min);
-    const snapped=Math.round(raw/step)*step;
-    return Math.max(min, Math.min(max, snapped));
+    const ratio=Math.max(0,Math.min(1,(clientX-rect.left)/rect.width));
+    const min=+wrap.dataset.min,max=+wrap.dataset.max,step=+wrap.dataset.step;
+    return Math.max(min,Math.min(max,Math.round((min+ratio*(max-min))/step)*step));
   }
   function applyFromX(clientX){
-    const v=valueFromX(clientX);
-    if(v===scenario.monthly) return;
-    scenario.monthly=v;
-    scenario.preset=null;
+    const v=valueFromX(clientX);if(v===scenario.monthly) return;
+    scenario.monthly=v;scenario.preset=null;
     document.querySelectorAll('.scenarioPresets button').forEach(b=>b.classList.remove('on'));
     updateScenarioUI();
   }
-  wrap.addEventListener('pointerdown',function(e){
-    e.preventDefault();e.stopPropagation();
-    active=true;
-    wrap.classList.add('dragging');
-    try{wrap.setPointerCapture(e.pointerId)}catch(_){}
-    applyFromX(e.clientX);
-    haptic('light');
-  });
-  wrap.addEventListener('pointermove',function(e){
-    if(!active) return;
-    e.preventDefault();e.stopPropagation();
-    applyFromX(e.clientX);
-  });
-  function finish(e){
-    if(!active) return;
-    active=false;
-    wrap.classList.remove('dragging');
-    try{wrap.releasePointerCapture(e.pointerId)}catch(_){}
-  }
+  wrap.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();active=true;wrap.classList.add('dragging');try{wrap.setPointerCapture(e.pointerId)}catch(_){}applyFromX(e.clientX);haptic('light')});
+  wrap.addEventListener('pointermove',function(e){if(!active) return;e.preventDefault();e.stopPropagation();applyFromX(e.clientX)});
+  function finish(e){if(!active)return;active=false;wrap.classList.remove('dragging');try{wrap.releasePointerCapture(e.pointerId)}catch(_){}}
   wrap.addEventListener('pointerup',finish);
   wrap.addEventListener('pointercancel',finish);
 }
 function updateScenarioUI(){
-  const wrap=document.getElementById('scSliderWrap');
-  const fill=document.getElementById('scFill');
-  const thumb=document.getElementById('scThumb');
-  const amount=document.getElementById('scenarioAmount');
+  const wrap=document.getElementById('scSliderWrap'),fill=document.getElementById('scFill'),thumb=document.getElementById('scThumb'),amount=document.getElementById('scenarioAmount');
   if(!wrap||!fill||!thumb) return;
-  const min=+wrap.dataset.min, max=+wrap.dataset.max;
-  const pct=Math.max(0, Math.min(1, (scenario.monthly-min)/(max-min)));
-  fill.style.width=(pct*100)+'%';
-  thumb.style.left=(pct*100)+'%';
-  if(amount && document.activeElement!==amount) amount.value=scenario.monthly;
+  const min=+wrap.dataset.min,max=+wrap.dataset.max;
+  const pct=Math.max(0,Math.min(1,(scenario.monthly-min)/(max-min)));
+  fill.style.width=(pct*100)+'%';thumb.style.left=(pct*100)+'%';
+  if(amount&&document.activeElement!==amount) amount.value=scenario.monthly;
   const res=computeScenario();
-  const num=document.getElementById('scNum');
-  const sMonths=document.getElementById('scMonths');
-  const sMonthly=document.getElementById('scMonthly');
-  const sPayoff=document.getElementById('scPayoff');
-  const heroLabel=document.querySelector('.scenarioHeroLabel');
+  const num=document.getElementById('scNum'),sMonths=document.getElementById('scMonths'),sMonthly=document.getElementById('scMonthly'),sPayoff=document.getElementById('scPayoff'),heroLabel=document.querySelector('.scenarioHeroLabel');
   if(num) num.textContent=res.months? res.months+' мес.' : '—';
   if(sMonths) sMonths.textContent=res.months? res.months : '—';
   if(sMonthly) sMonthly.textContent=fmt(res.monthly);
   if(sPayoff) sPayoff.textContent=res.payoff;
   if(heroLabel) heroLabel.textContent=res.months? 'до полного погашения' : 'укажи взнос, чтобы увидеть срок';
 }
-function setScenarioPreset(key,val){
-  scenario.preset=key;scenario.monthly=val;
-  document.querySelectorAll('.scenarioPresets button').forEach(b=>b.classList.toggle('on', b.dataset.preset===key));
-  updateScenarioUI();
-  haptic('select');
-}
-function onScenarioAmount(v){
-  scenario.monthly=Math.max(0, +v||0);
-  scenario.preset=null;
-  document.querySelectorAll('.scenarioPresets button').forEach(b=>b.classList.remove('on'));
-  updateScenarioUI();
+function setScenarioPreset(key,val){scenario.preset=key;scenario.monthly=val;document.querySelectorAll('.scenarioPresets button').forEach(b=>b.classList.toggle('on',b.dataset.preset===key));updateScenarioUI();haptic('select')}
+function onScenarioAmount(v){scenario.monthly=Math.max(0,+v||0);scenario.preset=null;document.querySelectorAll('.scenarioPresets button').forEach(b=>b.classList.remove('on'));updateScenarioUI()}
+
+/* ================== ГЛАВНАЯ: блок целей ================== */
+function renderHomeGoals(){
+  const wrap=document.getElementById('homeGoals');if(!wrap) return;
+  if(!data.goals.length){
+    wrap.innerHTML=`<button class="goalAddBtn" onclick="openSheet('goal')">＋ Добавить цель</button>`;
+    return;
+  }
+  wrap.innerHTML=data.goals.map((g,i)=>{
+    const pct=g.total?Math.min(100,Math.round(g.saved/g.total*100)):0;
+    return `<div class="goalMini" onclick="openSheet('goalpay',${i})">
+      <div class="gHead"><div class="gName">${esc(g.name)}</div><div class="gPct">${pct}%</div></div>
+      <div class="gBar"><i style="width:${pct}%"></i></div>
+      <div class="gSums">${fmt(g.saved)} из ${fmt(g.total)}</div>
+    </div>`;
+  }).join('')+`<button class="goalAddBtn" onclick="openSheet('goal')">＋ Добавить цель</button>`;
 }
 
+/* ================== ГЛАВНЫЙ РЕНДЕР ================== */
 function render(){
   applyTheme();
   let mk=monthKey();
   let debt=data.debts.reduce((s,d)=>s+d.left,0),start=data.debts.reduce((s,d)=>s+d.total,0),paid=start-debt;
-  let inc=data.income.filter(x=>x.month===mk).reduce((s,x)=>s+x.amount,0),exp=data.expenses.filter(x=>x.month===mk).reduce((s,x)=>s+x.amount,0),p=start?Math.round(paid/start*100):0,pay=data.history.filter(x=>x.type==='pay'&&x.date.slice(0,7)===mk).reduce((s,x)=>s+x.amount,0);
+  let p=start?Math.round(paid/start*100):0;
   netDebt.textContent=fmt(debt);debtBar.style.width=p+'%';debtPct.textContent=p+'% долгов погашено';debtStart.textContent='из '+fmt(start);
-  monthIncome.textContent=fmt(inc);monthExpense.textContent=fmt(exp);freeMoney.textContent=fmt(inc-exp);monthPayments.textContent=fmt(pay);
+  const fh=document.getElementById('forecastHome');
+  if(fh) fh.textContent=debt?('Осталось '+fmt(debt)+' до полной свободы'):'Все текущие долги закрыты!';
   debtCount.textContent=data.debts.length?(data.debts.length+' '+(data.debts.length===1?'долг':'долгов')):'—';
-  forecast.textContent=debt?'Осталось '+fmt(debt)+' до полной финансовой свободы':'🎉 Все текущие долги закрыты!';
-  forecastSub.textContent=debt?'Задай темп платежей в разделе «Аналитика», чтобы увидеть срок':'Можно сосредоточиться на накоплениях и целях';
   debtList.innerHTML=data.debts.length?data.debts.map((d,i)=>{let q=d.total?Math.round(d.paid/d.total*100):0;return `<div class="debt"><div class="row"><div><h3>${esc(d.name)}</h3><span class="tag">${esc(d.who||'обязательство')}</span></div><div class="amount">${fmt(d.left)}</div></div><div class="bar"><i style="width:${q}%"></i></div><div class="row muted" style="font-size:12px"><span>${q}% погашено</span><span>было ${fmt(d.total)}</span></div><div class="actions"><button class="btn primary" onclick="openSheet('pay',${i})">＋ Платёж</button><button class="btn" onclick="deleteDebt(${i})">Удалить</button></div></div>`}).join(''):'<div class="card empty">Тут появятся твои обязательства и прогресс по ним</div>';
-  let tx=data.history.filter(x=>periodMatches(x.date)).slice(0,100);
-  moneyList.innerHTML=tx.length?tx.map(x=>`<div class="tx"><div><b>${esc(x.text)}</b><div class="muted" style="font-size:12px;margin-top:3px">${new Date(x.date).toLocaleDateString('ru-RU')}</div></div><div class="sum ${x.type==='expense'?'negative':x.type==='pay'?'negative':'positive'}">${x.type==='expense'||x.type==='pay'?'-':'+'}${fmt(x.amount)}</div></div>`).join(''):'<div class="card empty">Операций за выбранный период нет</div>';
-  let avg=inc?Math.round(inc):0;
-  stats.innerHTML=`<div class="miniCard"><div class="eyebrow">Долгов</div><b>${data.debts.length}</b></div><div class="miniCard"><div class="eyebrow">Погашено</div><b>${fmt(paid)}</b></div><div class="miniCard"><div class="eyebrow">Свободно</div><b>${fmt(inc-exp)}</b></div><div class="miniCard"><div class="eyebrow">Доход / мес.</div><b>${fmt(avg)}</b></div>`;
+  renderHomeGoals();
   renderPeriodAnalytics();
-  goalList.innerHTML=data.goals.length?data.goals.map((g,i)=>{let q=g.total?Math.round(g.saved/g.total*100):0;return `<div class="goal"><div class="row"><div><h3><svg class="sectionIcon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="currentColor" opacity=".1"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="m16.5 7.5 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>${esc(g.name)}</h3><span class="muted">${fmt(g.saved)} из ${fmt(g.total)}</span></div><b>${q}%</b></div><div class="bar"><i style="width:${q}%"></i></div><div class="actions"><button class="btn primary" onclick="openSheet('goalpay',${i})">＋ Пополнить</button><button class="btn" onclick="deleteGoal(${i})">Удалить</button></div></div>`}).join(''):'<div class="card empty">Начни первую финансовую цель</div>';
-  renderScenario();
+  renderAnalytics();
 }
 
+/* ================== ЭКСПОРТ / ИМПОРТ / СБРОС ================== */
 function stamp(){const d=now();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes())}
-function exportData(){
-  try{
-    const a=document.createElement('a');
-    a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));
-    a.download='fingramate_backup_'+stamp()+'.json';
-    a.click();
-    toast('Резервная копия сохранена');haptic('success');
-  }catch(e){toast('Не удалось сохранить');haptic('error')}
-}
+function exportData(){try{const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));a.download='fingramate_backup_'+stamp()+'.json';a.click();toast('Резервная копия сохранена');haptic('success')}catch(e){toast('Не удалось сохранить');haptic('error')}}
 function importData(){
-  const inp=document.createElement('input');
-  inp.type='file';inp.accept='application/json,.json';
+  const inp=document.createElement('input');inp.type='file';inp.accept='application/json,.json';
   inp.onchange=function(){
     const f=inp.files&&inp.files[0];if(!f)return;
     const reader=new FileReader();
@@ -886,8 +1065,7 @@ function importData(){
           theme:typeof parsed.theme==='string'?parsed.theme:'system',
           period:parsed.period&&typeof parsed.period==='object'?parsed.period:{mode:'month',value:monthKey()}
         };
-        scenario.initialized=false;
-        save();
+        scenario.initialized=false;save();
         toast('Данные восстановлены');haptic('success');
       }catch(e){toast('Файл повреждён или не подходит');haptic('error')}
     };
