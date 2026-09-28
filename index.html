@@ -7,29 +7,44 @@
 <style>
 :root{
   --bg:#0f0710; --bg2:#1b0a12;
-  --card:rgba(255,255,255,.06);
-  --line:rgba(255,190,215,.13);
+  --card:#18101b;
+  --card-soft:#1e1422;
+  --line:rgba(255,190,215,.12);
   --text:#fff7fa; --muted:#c7a7b2;
   --a:#d81b60; --a2:#ff4f91;
-  --good:#32d583; --bad:#ff647c; --warn:#f7c948;
-  --shadow:0 20px 70px rgba(216,27,96,.18);
-  --nav-bg:rgba(25,6,14,.92);
+  --good:#32d583; --bad:#ff647c;
+  --shadow:0 10px 30px rgba(0,0,0,.28);
+  --nav-bg:#160a14;
 }
 html[data-base="light"]{
   --bg:#f5eef2; --bg2:#ffffff;
-  --card:rgba(255,255,255,.86);
+  --card:#ffffff;
+  --card-soft:#fdf7fa;
   --line:rgba(120,40,80,.12);
   --text:#2a1620; --muted:#8a6a78;
-  --a:#d81b60; --a2:#ff4f91;
-  --shadow:0 18px 50px rgba(120,40,80,.14);
-  --nav-bg:rgba(255,240,246,.92);
+  --shadow:0 8px 24px rgba(120,40,80,.10);
+  --nav-bg:#fff7fb;
 }
 *{box-sizing:border-box}
 html{overscroll-behavior:none;-webkit-text-size-adjust:100%}
 html,body{overflow-x:hidden}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 0%,color-mix(in srgb,var(--a) 24%,transparent),transparent 34%),radial-gradient(circle at 100% 25%,rgba(216,27,96,.08),transparent 32%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",sans-serif;letter-spacing:-.01em;-webkit-tap-highlight-color:transparent;transition:background .25s ease,color .25s ease}
-body:before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(circle at 25% 15%,color-mix(in srgb,var(--a) 13%,transparent),transparent 24%),radial-gradient(circle at 80% 70%,rgba(216,27,96,.07),transparent 24%);filter:blur(30px);animation:ambient 12s ease-in-out infinite alternate}
-@keyframes ambient{from{transform:translate3d(-1%,-1%,0) scale(1)}to{transform:translate3d(2%,1%,0) scale(1.04)}}
+body{
+  margin:0;min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",sans-serif;
+  letter-spacing:-.01em;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .2s ease,color .2s ease;
+}
+/* Лёгкий градиент — без blur, без анимации */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 800px 500px at 15% -10%, color-mix(in srgb, var(--a) 14%, transparent), transparent 70%),
+    radial-gradient(ellipse 700px 500px at 110% 30%, color-mix(in srgb, var(--a2) 10%, transparent), transparent 70%);
+  opacity:.85;
+}
 button,input,select{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}
 
 .screens-viewport::-webkit-scrollbar,
@@ -46,86 +61,133 @@ body::-webkit-scrollbar{display:none;width:0;height:0}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .brand{font-size:24px;font-weight:700;letter-spacing:-.055em}
 .brand span{color:var(--a2)}
-.icon{width:44px;height:44px;border:1px solid var(--line);border-radius:15px;background:var(--card);backdrop-filter:blur(20px);transition:transform .18s ease}
+.icon{
+  width:44px;height:44px;border:1px solid var(--line);border-radius:15px;
+  background:var(--card);
+  transition:transform .15s ease;
+}
 
 .screens-viewport{overflow:hidden;position:relative;touch-action:pan-y}
-.screens-track{display:flex;width:500%;transition:transform .42s cubic-bezier(.22,1,.36,1);will-change:transform}
-.screen{display:block;width:20%;flex:0 0 20%;opacity:.4;transition:opacity .35s ease;min-height:100%}
+.screens-track{
+  display:flex;width:500%;
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  transform:translateZ(0);
+}
+.screen{
+  display:block;width:20%;flex:0 0 20%;
+  opacity:.35;
+  transition:opacity .3s ease;
+}
 .screen.active{opacity:1}
 .screens-track.dragging{transition:none}
 
-.card{border:1px solid var(--line);background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:24px;padding:20px;margin-bottom:13px;box-shadow:var(--shadow);position:relative}
+/* Карточки — сплошной фон вместо blur, мягкая тень */
+.card{
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:22px;
+  padding:20px;margin-bottom:12px;
+  box-shadow:var(--shadow);
+  position:relative;
+}
 .eyebrow{font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:550}
 .big{font-size:38px;font-weight:700;letter-spacing:-.06em;line-height:.98}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.miniCard{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:19px;padding:15px}
+.miniCard{
+  border:1px solid var(--line);
+  background:var(--card-soft);
+  border-radius:18px;padding:15px;
+}
 .miniCard b{font-size:19px;font-weight:650;letter-spacing:-.035em}
 .miniCard small{display:block;color:var(--muted);margin-top:4px}
 .row{display:flex;justify-content:space-between;gap:10px;align-items:center}
 .progress{height:11px;background:rgba(128,128,128,.18);border-radius:99px;overflow:hidden;margin:16px 0 9px}
-.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:.4s}
-.btn{border:1px solid var(--line);background:rgba(255,255,255,.055);padding:12px 14px;border-radius:15px;font-weight:550;letter-spacing:-.015em}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:width .5s ease}
+.btn{
+  border:1px solid var(--line);
+  background:var(--card-soft);
+  padding:12px 14px;border-radius:15px;
+  font-weight:550;letter-spacing:-.015em;
+  transition:transform .15s ease,background .15s ease;
+}
 .primary{background:var(--a)!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
 .danger{color:var(--bad)!important}
 .muted{color:var(--muted)}
 .sectionTitle{font-size:17px;font-weight:650;letter-spacing:-.03em;margin:20px 2px 10px}
-.debt,.tx,.goal{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:20px;padding:16px;margin-bottom:10px}
+.debt,.tx,.goal{border:1px solid var(--line);background:var(--card-soft);border-radius:18px;padding:16px;margin-bottom:10px;transition:transform .15s ease}
 .debt h3,.goal h3{margin:0 0 3px;font-size:16px;font-weight:650;letter-spacing:-.02em}
 .amount{font-weight:650;font-size:21px;letter-spacing:-.035em}
 .bar{height:7px;background:rgba(128,128,128,.17);border-radius:99px;overflow:hidden;margin:11px 0 8px}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:width .5s ease}
 .actions{display:flex;gap:8px;margin-top:10px}.actions .btn{flex:1;padding:10px}
 .tag{display:inline-flex;padding:5px 8px;border-radius:9px;background:color-mix(in srgb,var(--a) 15%,transparent);color:var(--a2);font-size:11px}
 .tx{display:flex;justify-content:space-between;gap:12px}
 .tx .sum{font-weight:800;white-space:nowrap}
 .positive{color:var(--good)}.negative{color:var(--bad)}
 
-.nav{position:fixed;z-index:5;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(570px,calc(100% - 20px));display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;border:1px solid var(--line);border-radius:23px;background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.nav button{border:0;background:none;color:var(--muted);padding:7px 2px;border-radius:15px;font-size:20px;position:relative}
+.nav{
+  position:fixed;z-index:5;
+  left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%);
+  width:min(570px,calc(100% - 20px));
+  display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+  padding:8px;border:1px solid var(--line);border-radius:22px;
+  background:var(--nav-bg);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+.nav button{border:0;background:none;color:var(--muted);padding:7px 2px;border-radius:14px;font-size:20px;position:relative;transition:color .2s ease,background .2s ease,transform .15s ease}
 .nav button small{font-size:10px}
-.nav button.active{color:var(--text);background:rgba(255,255,255,.09)}
+.nav button.active{color:var(--text);background:rgba(255,255,255,.08)}
 
-.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:20;opacity:0;transition:opacity .25s ease;touch-action:none}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:20;opacity:0;transition:opacity .22s ease;touch-action:none}
 .sheet.open{display:flex;opacity:1}
-.modal{width:min(600px,100%);margin:auto auto 0;background:var(--bg2);border:1px solid var(--line);border-radius:28px 28px 0 0;padding:22px;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));max-height:90vh;overflow:auto;transform:translateY(28px);transition:transform .32s cubic-bezier(.2,.85,.2,1);touch-action:pan-y}
+.modal{
+  width:min(600px,100%);margin:auto auto 0;
+  background:var(--bg2);
+  border:1px solid var(--line);border-radius:26px 26px 0 0;
+  padding:22px;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));
+  max-height:90vh;overflow:auto;
+  transform:translateY(24px);
+  transition:transform .28s cubic-bezier(.2,.85,.2,1);
+  touch-action:pan-y;
+}
 .sheet.open .modal{transform:translateY(0)}
 .sheet-dragging .modal{transition:none}
 .close{float:right;border:0;background:none;font-size:25px;color:var(--muted)}
 label{font-size:12px;color:var(--muted)}
-input,select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.07);color:var(--text);outline:none;margin:5px 0 11px;font-size:16px}
+input,select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card-soft);color:var(--text);outline:none;margin:5px 0 11px;font-size:16px}
 h2{margin:0 0 18px}
 .choice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.choice button{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.05);min-height:46px;font-weight:550}
+.choice button{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);min-height:46px;font-weight:550}
 .choice button.sel{background:var(--a);color:#fff;border-color:transparent}
 .empty{text-align:center;color:var(--muted);padding:22px 8px}
-.toast{position:fixed;z-index:30;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:#171b26;color:#fff;padding:12px 16px;border-radius:14px;transition:.25s;pointer-events:none}
+.toast{
+  position:fixed;z-index:30;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));
+  transform:translate(-50%,20px);opacity:0;
+  background:#171b26;color:#fff;padding:12px 16px;border-radius:14px;
+  transition:opacity .2s ease,transform .2s ease;pointer-events:none;
+}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-.btn, .icon, .nav button, .choice button, .periodDisplay, .periodArrow,
-.calcKey, .calcQuick button, .periodGrid button, .periodYearNav button,
-.scenarioPresets button, .debt, .goal, .tx, .dayRow button,
-.card[onclick], .miniCard[onclick]{
-  transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .22s ease,border-color .22s ease;
-  will-change:transform;-webkit-tap-highlight-color:transparent
+/* Универсальные press-эффекты (только transform — быстро) */
+.btn,.icon,.nav button,.choice button,.periodDisplay,.periodArrow,
+.calcKey,.calcQuick button,.periodGrid button,.periodYearNav button,
+.scenarioPresets button,.debt,.goal,.tx,.dayRow button,[onclick]{
+  -webkit-tap-highlight-color:transparent;
 }
-.btn:active, .icon:active, .nav button:active, .choice button:active,
-.periodDisplay:active, .periodArrow:active,
-.calcKey:active, .calcQuick button:active, .periodGrid button:active,
-.periodYearNav button:active, .scenarioPresets button:active,
-.debt:active, .goal:active, .tx:active, .dayRow button:active,
-.card[onclick]:active, .miniCard[onclick]:active{transform:scale(.94)}
-.primary:active{transform:scale(.94);filter:brightness(1.08)}
-.nav button:active{transform:scale(.9)}
-.sheet button:active{transform:scale(.96)}
+.btn:active,.icon:active,.choice button:active,
+.periodDisplay:active,.periodArrow:active,
+.calcKey:active,.calcQuick button:active,.periodGrid button:active,
+.periodYearNav button:active,.scenarioPresets button:active,
+.debt:active,.goal:active,.tx:active,.dayRow button:active{
+  transform:scale(.96);
+}
+.primary:active{transform:scale(.96);filter:brightness(1.06)}
+.nav button:active{transform:scale(.92)}
 
-.card,.miniCard,.debt,.tx,.goal{animation:softRise .48s cubic-bezier(.22,1,.36,1) both}
-.screen.active .card:nth-child(2){animation-delay:.035s}
-.screen.active .card:nth-child(3){animation-delay:.07s}
-@keyframes softRise{from{opacity:0;transform:translateY(9px) scale(.992)}to{opacity:1;transform:translateY(0) scale(1)}}
-.progress i,.bar i{transition:width .8s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
-.progress i:after,.bar i:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.28) 50%,transparent 80%);transform:translateX(-100%);animation:shine 3.4s ease-in-out infinite}
-@keyframes shine{0%,55%{transform:translateX(-110%)}78%,100%{transform:translateX(110%)}}
-input,select{transition:border-color .2s ease}
+.card,.miniCard,.debt,.tx,.goal{animation:softRise .35s ease both}
+@keyframes softRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+input,select{transition:border-color .15s ease}
 input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent)}
 
 .periodCard{padding:17px}
@@ -133,13 +195,19 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 .periodMode button{padding:8px 10px;font-size:12px}
 .periodMode button.sel{background:var(--a);color:#fff;border-color:transparent}
 .periodControls{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center;margin-top:13px}
-.periodDisplay{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.055);color:var(--text);font-size:15px;font-weight:550;cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.periodDisplay{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 14px;border:1px solid var(--line);border-radius:15px;
+  background:var(--card-soft);color:var(--text);
+  font-size:15px;font-weight:550;cursor:pointer;
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
 .periodDisplay .caret{flex-shrink:0;opacity:.55}
 .periodArrow{padding:10px!important;font-size:20px;line-height:1;flex-shrink:0}
 .periodHint{font-size:12px;margin-top:9px}
 .periodTotal{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .periodTotal:last-child{border-bottom:0}
-.dayRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:16px;margin-bottom:8px}
+.dayRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);background:var(--card-soft);border-radius:16px;margin-bottom:8px;transition:transform .15s ease}
 .dayRow button{border:0;background:none;color:inherit;text-align:left;flex:1}
 .dayRow .dayMain{font-weight:650}
 .dayRow .dayDate{font-size:12px;color:var(--muted);margin-top:2px}
@@ -147,37 +215,36 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 .dayNumbers b{display:block;font-size:14px}
 .dayNumbers span{color:var(--muted)}
 .periodGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.periodGrid button{padding:12px 6px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.05);color:var(--text);font-size:14px;font-weight:550}
+.periodGrid button{padding:12px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--text);font-size:14px;font-weight:550}
 .periodGrid button.sel{background:var(--a);color:#fff;border-color:transparent}
 .periodYearNav{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center;margin-bottom:6px}
 .periodYearNav button{padding:10px!important;font-size:18px}
 .periodYearNav b{text-align:center;font-size:16px}
 
-/* ====== Сценарий ====== */
 .scenarioCard{padding:20px}
 .scenarioHero{display:flex;align-items:center;gap:14px;padding:4px 0 16px;border-bottom:1px solid var(--line)}
 .scenarioHeroIcon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;flex-shrink:0}
 .scenarioHeroNum{font-size:32px;font-weight:750;letter-spacing:-.055em;line-height:1}
 .scenarioHeroLabel{font-size:13px;color:var(--muted);margin-top:5px;font-weight:550}
 .scenarioGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.scenarioStat{padding:13px 14px;border-radius:15px;background:rgba(255,255,255,.045);border:1px solid var(--line)}
+.scenarioStat{padding:13px 14px;border-radius:15px;background:var(--card-soft);border:1px solid var(--line)}
 .scenarioStat .k{font-size:11px;color:var(--muted);font-weight:550}
 .scenarioStat .v{font-size:16px;font-weight:700;letter-spacing:-.03em;margin-top:4px}
 .scenarioPresets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-.scenarioPresets button{padding:11px 6px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.04);color:var(--text);font-size:12px;font-weight:600}
-.scenarioPresets button.on{background:color-mix(in srgb,var(--a) 18%,transparent);border-color:color-mix(in srgb,var(--a) 45%,transparent);color:var(--a2)}
+.scenarioPresets button{padding:11px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--text);font-size:12px;font-weight:600;transition:transform .15s ease,background .15s ease}
+.scenarioPresets button.on{background:color-mix(in srgb,var(--a) 22%,transparent);border-color:color-mix(in srgb,var(--a) 45%,transparent);color:var(--a2)}
 .scenarioPresets button small{display:block;color:var(--muted);font-size:10px;margin-top:3px;font-weight:500}
 
-/* ==== Кастомный ползунок без свечения ==== */
+/* ==== Кастомный ползунок: без свечения, защищён от свайпа ==== */
 .scenarioSliderWrap{
   margin-top:18px;
   position:relative;
-  height:34px;
+  height:36px;
   display:flex;
   align-items:center;
   touch-action:none;
-  user-select:none;
-  -webkit-user-select:none;
+  user-select:none;-webkit-user-select:none;
+  cursor:pointer;
 }
 .scenarioSliderTrack{
   position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
@@ -188,7 +255,7 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 .scenarioSliderFill{
   height:100%;width:0;border-radius:99px;
   background:linear-gradient(90deg,var(--a),var(--a2));
-  transition:width .05s linear;
+  will-change:width;
 }
 .scenarioSliderThumb{
   position:absolute;top:50%;left:0;
@@ -196,29 +263,33 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
   background:var(--a);
   border:3px solid var(--bg2);
   transform:translate(-50%,-50%);
-  transition:transform .12s ease, left .05s linear;
-  cursor:grab;
+  transition:transform .12s ease;
   pointer-events:none;
+  will-change:left,transform;
 }
-.scenarioSliderWrap.dragging .scenarioSliderThumb{transform:translate(-50%,-50%) scale(1.12);cursor:grabbing}
+.scenarioSliderWrap.dragging .scenarioSliderThumb{transform:translate(-50%,-50%) scale(1.15)}
 
 .scenarioAmountRow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
 .scenarioAmountRow .hint{font-size:12px;color:var(--muted)}
 .scenarioAmountInput{width:130px!important;margin:0!important;padding:10px 12px!important;text-align:right;font-weight:650!important}
 .scenarioEmpty{text-align:center;padding:14px 6px 4px;color:var(--muted);font-size:13px}
 
-.nav button.active::after{content:"";position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--a2);animation:pulseDot 2s ease-in-out infinite;pointer-events:none}
-@keyframes pulseDot{0%,100%{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb,var(--a2) 60%,transparent)}50%{opacity:.65;box-shadow:0 0 0 6px color-mix(in srgb,var(--a2) 0%,transparent)}}
+.nav button.active::after{
+  content:"";position:absolute;bottom:2px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--a2);
+  animation:pulseDot 2.5s ease-in-out infinite;pointer-events:none;
+}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
 
 .calcDisplay{background:rgba(0,0,0,.16);border:1px solid var(--line);border-radius:20px;padding:14px 16px;text-align:right;min-height:82px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
 .calcExpr{font-size:13px;color:var(--muted);min-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .calcValue{font-size:34px;font-weight:650;letter-spacing:-.05em;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .calcGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.calcKey{min-height:52px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.055);color:var(--text);font-size:19px;font-weight:550}
+.calcKey{min-height:52px;border:1px solid var(--line);border-radius:16px;background:var(--card-soft);color:var(--text);font-size:19px;font-weight:550;transition:transform .1s ease}
 .calcKey.op{color:var(--a2);background:color-mix(in srgb,var(--a) 10%,transparent)}
 .calcKey.equal{background:var(--a);color:#fff;border-color:transparent}
 .calcQuick{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
-.calcQuick button{padding:9px 6px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.04);color:var(--muted);font-size:12px}
+.calcQuick button{padding:9px 6px;border:1px solid var(--line);border-radius:13px;background:var(--card-soft);color:var(--muted);font-size:12px}
 .calcHint{font-size:11px;color:var(--muted);margin-top:9px;text-align:center}
 
 .iconGlyph{width:21px;height:21px;display:inline-block;vertical-align:middle}
@@ -226,7 +297,6 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 .actionIcon{width:19px;height:19px;vertical-align:-4px;margin-right:5px}
 .sectionIcon{width:18px;height:18px;vertical-align:-4px;margin-right:6px;opacity:.9}
 .nav button{font-weight:650}
-.nav button.active .navIcon{transform:translateY(-1px) scale(1.06);transition:transform .22s ease}
 
 @media (max-width:520px){.app{padding-left:14px;padding-right:14px}.big{font-size:36px}.card{padding:18px}.brand{font-size:23px}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -241,7 +311,7 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
 <div class="card"><div class="eyebrow">Финансовая свобода</div><div class="big" id="netDebt">0 ₽</div><div class="progress"><i id="debtBar"></i></div><div class="row"><span class="muted" id="debtPct">0% долгов погашено</span><span class="muted" id="debtStart">из 0 ₽</span></div></div>
 <div class="grid2"><div class="miniCard"><div class="eyebrow">Доходы</div><b id="monthIncome">0 ₽</b><small>за месяц</small></div><div class="miniCard"><div class="eyebrow">Расходы</div><b id="monthExpense">0 ₽</b><small>за месяц</small></div></div>
 <div class="grid2" style="margin-top:10px"><div class="miniCard"><div class="eyebrow">Свободно</div><b id="freeMoney">0 ₽</b><small>до платежей</small></div><div class="miniCard"><div class="eyebrow">Платежи</div><b id="monthPayments">0 ₽</b><small>за месяц</small></div></div>
-<div class="card" style="margin-top:13px"><div class="eyebrow">Ближайший ориентир</div><div id="forecast" style="font-size:18px;font-weight:750">Добавь долги и доходы — построим план</div><p class="muted" id="forecastSub" style="margin-bottom:0">Приложение будет считать примерный срок погашения</p></div>
+<div class="card" style="margin-top:12px"><div class="eyebrow">Ближайший ориентир</div><div id="forecast" style="font-size:18px;font-weight:750">Добавь долги и доходы — построим план</div><p class="muted" id="forecastSub" style="margin-bottom:0">Приложение будет считать примерный срок погашения</p></div>
 <div class="sectionTitle">Быстрые действия</div><div class="grid2">
 <button class="btn primary" onclick="openSheet('income')"><svg class="actionIcon" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M12 5l-6 6M12 5l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Доход</button>
 <button class="btn" onclick="openSheet('expense')"><svg class="actionIcon" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M12 19l6-6M12 19l-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Расход</button>
@@ -270,9 +340,9 @@ input:focus,select:focus{border-color:color-mix(in srgb,var(--a) 65%,transparent
   <div class="periodControls"><button class="btn periodArrow" onclick="shiftPeriod(-1)">‹</button><button class="periodDisplay" onclick="openPeriodPicker()"><span id="analyticsPeriodDisplayText">сентябрь 2026</span><svg class="caret" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="btn periodArrow" onclick="shiftPeriod(1)">›</button></div>
 </div>
 <div class="sectionTitle">Показатели</div><div id="stats" class="grid2"></div>
-<div class="card" style="margin-top:13px"><div class="eyebrow">Структура периода</div><div id="periodBreakdown"></div></div>
+<div class="card" style="margin-top:12px"><div class="eyebrow">Структура периода</div><div id="periodBreakdown"></div></div>
 <div class="sectionTitle">Дни выбранного месяца</div><div id="daysList"></div>
-<div class="card scenarioCard" style="margin-top:13px">
+<div class="card scenarioCard" style="margin-top:12px">
   <div class="eyebrow">Сценарий погашения</div>
   <div id="scenarioBody"></div>
 </div>
@@ -415,21 +485,26 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
   btn.addEventListener('click',function(){ setScreen(+this.dataset.idx); });
 });
 
+/* === Свайп экранов: игнорируем жесты на [data-no-swipe] (ползунок) === */
 (function(){
   const viewport=document.getElementById('screensViewport');
   const track=document.getElementById('screensTrack');
   let startX=0,startY=0,deltaX=0,dragging=false,locked=null,startTime=0;
+
   viewport.addEventListener('touchstart',function(e){
     if(e.touches.length!==1) return;
+    // Если жест начался на элементе, запрещающем свайп — не перехватываем
+    if(e.target.closest('[data-no-swipe]')){ dragging=false; locked='blocked'; return; }
     startX=e.touches[0].clientX;startY=e.touches[0].clientY;
     deltaX=0;dragging=true;locked=null;startTime=Date.now();
   },{passive:true});
+
   viewport.addEventListener('touchmove',function(e){
     if(!dragging) return;
     const x=e.touches[0].clientX, y=e.touches[0].clientY;
     const dx=x-startX, dy=y-startY;
     if(locked===null){
-      if(Math.abs(dx)>8 || Math.abs(dy)>8){
+      if(Math.abs(dx)>6 || Math.abs(dy)>6){
         locked=Math.abs(dx)>Math.abs(dy)?'h':'v';
         if(locked==='h') track.classList.add('dragging');
       }
@@ -443,7 +518,9 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
     deltaX=dx;
     e.preventDefault();
   },{passive:false});
+
   viewport.addEventListener('touchend',function(){
+    if(locked==='blocked'){ locked=null; return; }
     if(!dragging) return;
     dragging=false;
     track.classList.remove('dragging');
@@ -460,6 +537,7 @@ document.querySelectorAll('#navEl button').forEach(btn=>{
     }
     locked=null;deltaX=0;
   },{passive:true});
+
   window.addEventListener('resize',()=>{
     track.style.transition='none';
     track.style.transform=`translateX(-${currentScreen*20}%)`;
@@ -612,7 +690,6 @@ function renderPeriodAnalytics(){
 }
 function selectDay(k){data.period.mode='day';data.period.value=k;save();setScreen(2);haptic('select')}
 
-/* ============ Сценарий погашения ============ */
 let scenario = {monthly: 0, preset: null, initialized: false};
 function initScenarioIfNeeded(){
   if(scenario.initialized) return;
@@ -660,7 +737,7 @@ function renderScenario(){
       <div class="scenarioStat"><div class="k">Закроешь к</div><div class="v" id="scPayoff">${res.payoff}</div></div>
     </div>
     <div class="scenarioPresets">${presets.map(p=>`<button data-preset="${p.key}" data-val="${p.val}" class="${scenario.preset===p.key?'on':''}" onclick="setScenarioPreset('${p.key}',${p.val})">${p.label}<small>${fmt(p.val)}</small></button>`).join('')}</div>
-    <div class="scenarioSliderWrap" id="scSliderWrap" data-min="500" data-max="${rangeMax}" data-step="500">
+    <div class="scenarioSliderWrap" id="scSliderWrap" data-min="500" data-max="${rangeMax}" data-step="500" data-no-swipe="1">
       <div class="scenarioSliderTrack"><div class="scenarioSliderFill" id="scFill"></div></div>
       <div class="scenarioSliderThumb" id="scThumb"></div>
     </div>
@@ -673,10 +750,10 @@ function bindScenarioSlider(){
   if(!wrap || wrap.dataset.bound==='1') return;
   wrap.dataset.bound='1';
   let active=false;
-  const min=+wrap.dataset.min, max=+wrap.dataset.max, step=+wrap.dataset.step;
   function valueFromX(clientX){
     const rect=wrap.getBoundingClientRect();
     const ratio=Math.max(0, Math.min(1, (clientX-rect.left)/rect.width));
+    const min=+wrap.dataset.min, max=+wrap.dataset.max, step=+wrap.dataset.step;
     const raw=min + ratio*(max-min);
     const snapped=Math.round(raw/step)*step;
     return Math.max(min, Math.min(max, snapped));
@@ -690,27 +767,26 @@ function bindScenarioSlider(){
     updateScenarioUI();
   }
   wrap.addEventListener('pointerdown',function(e){
-    e.preventDefault();
+    e.preventDefault();e.stopPropagation();
     active=true;
     wrap.classList.add('dragging');
-    if(wrap.setPointerCapture) try{wrap.setPointerCapture(e.pointerId)}catch(_){}
+    try{wrap.setPointerCapture(e.pointerId)}catch(_){}
     applyFromX(e.clientX);
     haptic('light');
   });
   wrap.addEventListener('pointermove',function(e){
     if(!active) return;
-    e.preventDefault();
+    e.preventDefault();e.stopPropagation();
     applyFromX(e.clientX);
   });
   function finish(e){
     if(!active) return;
     active=false;
     wrap.classList.remove('dragging');
-    if(wrap.releasePointerCapture && e.pointerId!==undefined) try{wrap.releasePointerCapture(e.pointerId)}catch(_){}
+    try{wrap.releasePointerCapture(e.pointerId)}catch(_){}
   }
   wrap.addEventListener('pointerup',finish);
   wrap.addEventListener('pointercancel',finish);
-  wrap.addEventListener('pointerleave',function(e){ if(active) finish(e); });
 }
 function updateScenarioUI(){
   const wrap=document.getElementById('scSliderWrap');
